@@ -40,8 +40,20 @@ int get_time(int min, int max) {
 };
 
 
-int length(int*** list) {
-
+int len1(int* list) {
+	int i;
+	for (i=0; list[i] != NULL; i++);
+	return i-1
+}
+int len2(int** list) {
+	int i;
+	for (i=0; list[i] != NULL; i++);
+	return i-1
+}
+int len3(int*** list) {
+	int i;
+	for (i=0; list[i] != NULL; i++);
+	return i-1
 }
 
 

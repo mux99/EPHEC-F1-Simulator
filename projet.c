@@ -6,9 +6,9 @@ int car_nums[] = {44, 63, 1, 11, 55, 16, 4, 3, 14, 31, 10, 22, 5, 18, 6, 25, 77,
 
 char* locations[] = {"Bharain", "Saudi Arabian", "Australian", "Emilia Romagna", "Miami", "Spanish", "Monaco", "Azerbaijan", "Canadian", "British", "Austrian", "French", "Hungarian", "Belgian", "Dutch", "Italian", "Singapore", "Japanese", "United States", "Mexico City", "são Paulo", "Abu Dhabi", NULL};
 
-//"class" grand prix (GP)
 struct GrandPrix {
 	char* location;
+	int track_lenght = 5;
 
 	int* practice1;
 	int p1_best;
@@ -24,7 +24,6 @@ struct GrandPrix {
 	int* race;
 };
 
-//une voiture est définie par son numéro est son total de points
 struct Car {
 	int number;
 	int points; //(total)
@@ -32,6 +31,9 @@ struct Car {
 	int* points_GP; //list of points gained during each GP
 	int* best_laps; //list of best lap in order of GP
 };
+
+
+//====GENERAL====
 
 //generate a random time corresponding to the time spent
 //traversing 1/3 of a lap
@@ -56,7 +58,42 @@ int len3(int*** list) {
 	return i-1
 }
 
+//=====RACES SYM====
 
+char*** weekend1(GrandPrix grandprix, Car* cars) {
+	int race_laps = 350 / grandprix.track_lenght;
+
+	tryout(cars);
+	tryout(cars);
+	tryout(cars);
+
+	qualifications(cars, 18);
+	qualifications(cars, 15);
+	qualifications(cars, 12);
+
+	race(cars,)
+
+}
+
+char*** weekend2(char* country, Car* cars) {
+
+}
+
+int* tryout(Car* cars) {
+
+}
+
+int* qualifications(Car* cars, int duration) {
+
+}
+
+int* sprint(Car* cars, int laps) {
+
+}
+
+int* race(Car* cars, int laps) {
+
+}
 
 //=====MAIN=====
 
@@ -75,7 +112,7 @@ void main() {
 
 
 	//go through cars numbers to create them
-	Cars* cars = malloc(sizeof(Car));
+	Car* cars = malloc(sizeof(Car));
 	cars[0] = NULL;
 	cars_number = 0;
 

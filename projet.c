@@ -71,12 +71,24 @@ char*** weekend1(GrandPrix grandprix, Car* cars) {
 	qualifications(cars, 15);
 	qualifications(cars, 12);
 
-	race(cars,)
-
+	race(cars, race_laps)
 }
 
 char*** weekend2(char* country, Car* cars) {
+	int race_laps = 350 / grandprix.track_lenght;
+	int sprint_laps = 100 / grandprix.track_lenght;
 
+	tryout(cars);
+
+	qualifications(cars, 18);
+	qualifications(cars, 15);
+	qualifications(cars, 12);
+
+	tryout(cars);
+
+	sprint(cars, sprint_laps);
+
+	race(cars, race_laps);
 }
 
 int* tryout(Car* cars) {

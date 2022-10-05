@@ -95,6 +95,50 @@ int* race(Car* cars, int laps) {
 
 }
 
+	tryout(cars);
+	tryout(cars);
+	tryout(cars);
+
+	qualifications(cars, 18);
+	qualifications(cars, 15);
+	qualifications(cars, 12);
+
+	race(cars,race_laps);
+}
+
+char*** weekend2(GrandPrix grandprix, Car* cars) {
+	int race_laps = 350 / grandprix.track_lenght;
+	int sprint_laps = 100 / grandprix.track_lenght;
+
+	tryout(cars);
+
+	qualifications(cars, 18);
+	qualifications(cars, 15);
+	qualifications(cars, 12);
+
+	tryout(cars);
+
+	sprint(cars,sprint_laps);
+
+	race(cars,race_laps);
+}
+
+int* tryout(Car* cars) {
+
+}
+
+int* qualifications(Car* cars, int duration) {
+
+}
+
+int* sprint(Car* cars, int laps) {
+
+}
+
+int* race(Car* cars, int laps) {
+
+}
+
 //=====MAIN=====
 
 //display the given 2D matrix containing strings

@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+//ALL STORED TIMES IN ms
+//ALL STORED LENGTH IN Km
+
 int car_nums[] = {44, 63, 1, 11, 55, 16, 4, 3, 14, 31, 10, 22, 5, 18, 6, 25, 77, 24, 47, 9, NULL};
 
 char* locations[] = {"Bharain", "Saudi Arabian", "Australian", "Emilia Romagna", "Miami", "Spanish", "Monaco", "Azerbaijan", "Canadian", "British", "Austrian", "French", "Hungarian", "Belgian", "Dutch", "Italian", "Singapore", "Japanese", "United States", "Mexico City", "são Paulo", "Abu Dhabi", NULL};
@@ -45,17 +48,17 @@ int get_time(int min, int max) {
 int len1(int* list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i
 }
 int len2(int** list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i
 }
 int len3(int*** list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i
 }
 
 //=====RACES SYM====
@@ -92,7 +95,11 @@ char*** weekend2(char* country, Car* cars) {
 }
 
 int* tryout(Car* cars) {
+	int* best_laps[len1(cars)];
 
+	for (int i=0; cars[i] != NULL; i++) {
+
+	}
 }
 
 int* qualifications(Car* cars, int duration) {

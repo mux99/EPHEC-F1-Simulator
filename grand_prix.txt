@@ -1,0 +1,22 @@
+1,	Bharain, 		5412
+2,	Saudi Arabian,	6174
+3,	Australian,		5278
+4,	Emilia Romagna, 4909
+5,	Miami, 			5412
+6,	Spanish,		4675
+7,	Monaco,			3337
+8,	Azerbaijan,		6003
+9,	Canadian,		4361
+10,	British,		5891
+11,	Austrian,		4318
+12,	French,			5842
+13,	Hungarian,		4381
+14,	Belgian,		7004
+15,	Dutch,			4259
+16,	Italian,		5793
+17,	Singapore,		5063
+18,	Japanese,		5807
+19,	United States,	5514
+20,	Mexico City,	4304
+21,	são Paulo,		4309
+22,	Abu Dhabi,		5281

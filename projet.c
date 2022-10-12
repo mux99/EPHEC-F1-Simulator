@@ -3,11 +3,7 @@
 #include <stdio.h>
 
 //ALL STORED TIMES IN ms
-//ALL STORED LENGTH IN Km
-
-int car_nums[] = {44, 63, 1, 11, 55, 16, 4, 3, 14, 31, 10, 22, 5, 18, 6, 25, 77, 24, 47, 9, NULL};
-
-char* locations[] = {"Bharain", "Saudi Arabian", "Australian", "Emilia Romagna", "Miami", "Spanish", "Monaco", "Azerbaijan", "Canadian", "British", "Austrian", "French", "Hungarian", "Belgian", "Dutch", "Italian", "Singapore", "Japanese", "United States", "Mexico City", "são Paulo", "Abu Dhabi", NULL};
+//ALL STORED LENGTH IN m
 
 struct GrandPrix {
 	char* location;
@@ -40,8 +36,8 @@ struct Car {
 
 //generate a random time corresponding to the time spent
 //traversing 1/3 of a lap
-int get_time(int min, int max) {
-	return (rand() % (21)) + 25;
+int get_time() {
+	return rand() % ( + 1 - 25000) + 25000;
 };
 
 
@@ -63,43 +59,56 @@ int len3(int*** list) {
 
 //=====RACES SYM====
 
-char*** weekend1(GrandPrix grandprix, Car* cars) {
-	int race_laps = 350 / grandprix.track_lenght;
+void weekend1(GrandPrix grandprix, Car* cars) {
+	int race_laps = 350000 / grandprix.track_lenght;
 
-	tryout(cars);
-	tryout(cars);
-	tryout(cars);
+	practice(cars);
+	practice(cars);
+	practice(cars);
 
-	qualifications(cars, 18);
-	qualifications(cars, 15);
-	qualifications(cars, 12);
+	qualifications(cars, 1080000);
+	qualifications(cars, 900000);
+	qualifications(cars, 720000);
 
 	race(cars, race_laps)
 }
 
-char*** weekend2(char* country, Car* cars) {
-	int race_laps = 350 / grandprix.track_lenght;
-	int sprint_laps = 100 / grandprix.track_lenght;
+void weekend2(GrandPrix grandprix, Car* cars) {
+	int race_laps = 350000 / grandprix.track_lenght;
+	int sprint_laps = 100000 / grandprix.track_lenght;
 
-	tryout(cars);
+	practice(cars);
 
-	qualifications(cars, 18);
-	qualifications(cars, 15);
-	qualifications(cars, 12);
+	qualifications(cars, 1080000);
+	qualifications(cars, 900000);
+	qualifications(cars, 720000);
 
-	tryout(cars);
+	practice(cars);
 
 	sprint(cars, sprint_laps);
 
 	race(cars, race_laps);
 }
 
-int* tryout(Car* cars) {
-	int* best_laps[len1(cars)];
+int** practice(Car* cars) {
+	int i;
+/*	int** best_laps = (int **) malloc(len1(cars)*sizeof(int)*4)
 
-	for (int i=0; cars[i] != NULL; i++) {
-
+	for (i=0; cars[i] != NULL; i++) {
+		int tot_time = 0;
+		best_laps[i] = 0;
+		while (tot_time < 3600) {
+			int tmp = get_time()+get_time()+get_time();
+			if ((tot_time+tmp) > 3600) {
+				break;
+			}
+			if (tmp > best_laps[i]) {
+				best_laps[i] = tmp;
+			}
+		}
 	}
+	best_laps[i] = NULL;
+	return best_laps;*/
 }
 
 int* qualifications(Car* cars, int duration) {
@@ -111,51 +120,6 @@ int* sprint(Car* cars, int laps) {
 }
 
 int* race(Car* cars, int laps) {
-
-}
-
-	tryout(cars);
-	tryout(cars);
-	tryout(cars);
-
-	qualifications(cars, 18);
-	qualifications(cars, 15);
-	qualifications(cars, 12);
-
-	race(cars,race_laps);
-}
-
-char*** weekend2(GrandPrix grandprix, Car* cars) {
-	int race_laps = 350 / grandprix.track_lenght;
-	int sprint_laps = 100 / grandprix.track_lenght;
-
-	tryout(cars);
-
-	qualifications(cars, 18);
-	qualifications(cars, 15);
-	qualifications(cars, 12);
-
-	tryout(cars);
-
-	sprint(cars,sprint_laps);
-
-	race(cars,race_laps);
-}
-
-int* tryout(Car* cars) {
-
-}
-
-int* qualifications(Car* cars, int duration) {
-
-}
-
-int* sprint(Car* cars, int laps) {
-
-}
-
-int* race(Car* cars, int laps) {
-
 }
 
 //=====MAIN=====

@@ -43,30 +43,39 @@ int get_time(int min, int max) {
 int len1(int* list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i-1;
 }
 int len2(int** list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i-1;
 }
 int len3(int*** list) {
 	int i;
 	for (i=0; list[i] != NULL; i++);
-	return i-1
+	return i-1;
 }
 
-
+int maxArray(int* array){
+    int max = 0;
+    for(int i = 0; array[i] != NULL; i++){
+        if(array[i] > max){
+            max = array[i];
+        }
+    }
+    return max;
+}
 
 //=====MAIN=====
 
-//display the given 2D matrix containing strings
-//	(first line is collum names)
-//	(everything must be NULL terminated)
-void display(char*** board) {
-	int* lenghts[]
-	for (i=0; board[i] != NULL; i++) {
-	}
+// display the given 2D matrix containing strings
+// (first line is collum names)
+// (everything must be NULL terminated)
+void display(char*** board) { // receive
+    int* lenght[len2(board)]; // nb de colonne
+    for(int i = 0; board[i] != NULL; i++) {
+        board
+    }
 };
 
 void main() {

@@ -1,0 +1,2 @@
+#set the simulation multiplyer (all waiting times are affected)
+speed_mutiplier=60

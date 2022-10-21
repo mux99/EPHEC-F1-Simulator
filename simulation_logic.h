@@ -12,6 +12,8 @@ GrandPrix* init_GPs(char*** data) {
 	for(i=0; data[i] != NULL; i++) {
 		out[i] = GP_init(data[i][0],atoi(data[i][1]))
 	}
+	out[i] = NULL;
+	return out;
 }
 
 Car* init_CARs(char*** data) {
@@ -20,9 +22,11 @@ Car* init_CARs(char*** data) {
 	for(i=0; data[i] != NULL; i++) {
 		out[i] = CAR_init(atoi(data[i][0]),data[i][1],data[i][2])
 	}
+	out[i] = NULL;
+	return out;
 }
 
-void weekend1() {
+void weekend1(Car* cars, GrandPrix gp) {
 	practice(cars);
 	practice(cars);
 	practice(cars);
@@ -31,10 +35,10 @@ void weekend1() {
 	qualifications(cars, 900000);
 	qualifications(cars, 720000);
 
-	race(cars, grandprix.race_laps);
+	race(cars, gp.race_laps);
 }
 
-void weekend2() {
+void weekend2(Car* cars, GrandPrix gp) {
 	practice(cars);
 
 	qualifications(cars, 1080000);
@@ -43,7 +47,7 @@ void weekend2() {
 
 	practice(cars);
 
-	sprint(cars, grandprix.sprint_laps_number);
+	sprint(cars, gp.sprint_laps_number);
 
-	race(cars, grandprix.race_laps);
+	race(cars, gp.race_laps);
 }

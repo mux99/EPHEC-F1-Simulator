@@ -14,6 +14,15 @@
 //ALL DISTENCES IN m
 
 /*
+int maxArray(int* array){
+    int max = 0;
+    for(int i = 0; array[i] != NULL; i++){
+        if(array[i] > max){
+            max = array[i];
+        }
+    }
+    return max;
+}
 int get_time() {
 	return rand() % ( + 1 - 25000) + 25000;
 };*/

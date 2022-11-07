@@ -1,9 +1,12 @@
 struct GrandPrix {
+	bool is_null;
+
 	char* location;
 	int track_lenght;
-	int spint_laps_number;
+	int sprint_laps_number;
 	int race_laps_number;
-	int GP_state = 0; //the num correspond to the current activity to be displayed.
+	int GP_state;
+	//the num correspond to the current activity to be displayed.
 	//depending on the weekend type some states might be skipped
 
 	//in all the lists below, the elements are in the same order as the CAR* list
@@ -36,11 +39,20 @@ struct GrandPrix {
 	int* race_laps; //7
 	int* race_time;
 	int* race_best_lap;
-};
+}location, track_lenght, sprint_laps_number, race_laps_number, GP_state;
 
-GrandPrix GP__init(char* location, int track_lenght) {
-	GrandPrix out;
-	out = { .location = location, .track_lenght = track_lenght};
+struct GrandPrix GP_init(char* location, int track_lenght, bool is_null) {
+	struct GrandPrix out;
+	out.is_null = allocSharedMem(sizeof(bool));
+	out.location = allocSharedMem(sizeof(char)*array_len_1(location));
+	out.track_lenght = allocSharedMem(sizeof(int));
+	out.sprint_laps_number = allocSharedMem(sizeof(int));
+	out.race_laps_number = allocSharedMem(sizeof(int));
+
+	out.is_null = is_null;
+	out.location = location;
+	out.track_lenght = track_lenght;
 	out.sprint_laps_number = 100000 / track_lenght;
 	out.race_laps_number = 300000 / track_lenght;
+	return out;
 };

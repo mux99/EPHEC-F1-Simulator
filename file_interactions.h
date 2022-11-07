@@ -1,3 +1,21 @@
+/* count quotes, true if odd number */
+int in_string(char* str){
+	int i = 0;
+	int n = 0;
+	for(i=0; str[i] != '\0'; i++){
+		if(str[i] == '"'){
+			n++;
+		}
+	}
+	return n % 2 != 0;
+}
+
+void ignore_comments(char* s) {
+	for(int i = 0; s[i]!='\0'; i++){
+		if(s[i] == '#'){s[i]='\0';return;}
+	}
+}
+
 /* Split string on delim character*/
 /* into NULL terminated array */
 char** split(char* s, const char delim){
@@ -45,7 +63,7 @@ char** split(char* s, const char delim){
 }
 
 /* return lenght of given NULL terminated array */
-int array_len(char** list){
+int array_len_2(char** list){
 	int len;
 	for(len = 0; list[len] != NULL; len++){}
 	return len;
@@ -53,7 +71,7 @@ int array_len(char** list){
 
 /* Read File to string */
 char* read_file(char* path){
-	int file = open(path, O_RDONLY);
+	int file = open(path, SHM_RDONLY);
 	if(file<0){printf("error file not found");exit(-1);}
 
 	//get file length
@@ -80,11 +98,12 @@ char* read_file(char* path){
 /* into NULL terminated arrays */
 char*** read_CSV(char* path) {
 	char* tmp = read_file(path);
-	char** tmp2 = split(tmp, '\n') //separate each line of file
-
-	char*** out = malloc(sizeof(char**) * array_len(tmp2))
+	char** tmp2 = split(tmp, '\n'); //separate each line of file
+	char*** out;
+	out = malloc(sizeof(char**) * array_len_2(tmp2));
 	int i;
 	for(i=0; tmp2[i] != NULL; i++) {
+		ignore_comments(tmp2[i]);
 		if(tmp2[i][0] == '#'){continue;}//skip comments
 		out[i] = split(tmp2[i], ',');
 	}

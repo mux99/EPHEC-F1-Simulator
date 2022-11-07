@@ -10,11 +10,6 @@ int in_string(char* str){
 	return n % 2 != 0;
 }
 
-void ignore_comments(char* s) {
-	for(int i = 0; s[i]!='\0'; i++){
-		if(s[i] == '#'){s[i]='\0';return;}
-	}
-}
 
 /* Split string on delim character*/
 /* into NULL terminated array */
@@ -71,7 +66,7 @@ int array_len_2(char** list){
 
 /* Read File to string */
 char* read_file(char* path){
-	int file = open(path, SHM_RDONLY);
+	int file = open(path, O_RDONLY);
 	if(file<0){printf("error file not found");exit(-1);}
 
 	//get file length
@@ -93,6 +88,16 @@ char* read_file(char* path){
 	return out;
 }
 
+/* Print char[][] NULL terminated */
+void print_array(char** a){
+	int i;
+	printf("\n");
+	for(i=0; a[i] != NULL; i++){
+		printf("%s",a[i]);
+	}
+	printf("\n");
+}
+
 /* read given csv file*/
 /* lines begining by # are comments */
 /* into NULL terminated arrays */
@@ -100,12 +105,24 @@ char*** read_CSV(char* path) {
 	char* tmp = read_file(path);
 	char** tmp2 = split(tmp, '\n'); //separate each line of file
 	char*** out;
-	out = malloc(sizeof(char**) * array_len_2(tmp2));
-	int i;
+
+	out = calloc(array_len_2(tmp2), sizeof(char**));
+
+	int i; int j;
 	for(i=0; tmp2[i] != NULL; i++) {
-		ignore_comments(tmp2[i]);
-		if(tmp2[i][0] == '#'){continue;}//skip comments
-		out[i] = split(tmp2[i], ',');
+		//ignore comments
+		if(tmp2[i][0] == '#'){continue;}
+
+		//split line in words
+		char** tmp3 = split(tmp2[i], ',');
+		out[i] = calloc(array_len_2(tmp3), sizeof(char*));
+		int max_j = array_len_2(tmp3);
+		
+		for(j=0; j < max_j; j++) {
+			printf("%s\n", tmp3[j]);
+			out[i][j] = calloc(20, sizeof(char));
+			out[i][j] = tmp3[j];
+		} 
 	}
 	return out;
 }

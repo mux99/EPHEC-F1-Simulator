@@ -43,12 +43,6 @@ struct GrandPrix {
 
 struct GrandPrix GP_init(char* location, int track_lenght, bool is_null) {
 	struct GrandPrix out;
-	out.is_null = allocSharedMem(sizeof(bool));
-	out.location = allocSharedMem(sizeof(char)*array_len_1(location));
-	out.track_lenght = allocSharedMem(sizeof(int));
-	out.sprint_laps_number = allocSharedMem(sizeof(int));
-	out.race_laps_number = allocSharedMem(sizeof(int));
-
 	out.is_null = is_null;
 	out.location = location;
 	out.track_lenght = track_lenght;

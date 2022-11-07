@@ -8,7 +8,7 @@ int array_len_3(char*** list){
 /* return lenght of given NULL terminated array */
 int array_len_1(char* list){
 	int len;
-	for(len = 0; list[len] != NULL; len++){}
+	for(len = 0; list[len] != '\0'; len++){}
 	return len;
 }
 
@@ -27,6 +27,7 @@ struct Car* init_CARs(char*** data) {
 	struct Car* out = malloc(sizeof(struct Car)*array_len_3(data));
 	int i;
 	for(i=0; data[i] != NULL; i++) {
+		printf("%s\n", data[i][0]);
 		out[i] = CAR_init(atoi(data[i][0]),data[i][1],data[i][2],false);
 	}
 	out[i] = CAR_init(0,"NULL","NULL",true);

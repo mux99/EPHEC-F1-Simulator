@@ -12,8 +12,8 @@
 
 #include "struct_CAR.h"
 #include "struct_GP.h"
-#include "simulation_logic.h"
 #include "file_interactions.h"
+#include "simulation_logic.h"
 
 //ALL TIMES IN ms
 //ALL DISTENCES IN m
@@ -35,17 +35,13 @@ int get_time() {
 /* ----MAIN----*/
 int main(int argc, char const *argv[])
 {
-	int key_1 = 77;
-	int key_2 = 78;
+	//1
+	char*** data = read_CSV("data/cars.csv");
+	struct Car* cars = init_CARs(data);
 
-	char*** data1 = read_CSV("data/cars.csv");
+	//2
 	char*** data2 = read_CSV("data/grand_prix.csv");
-
-	struct Car* cars = init_CARs(data1);
 	struct GrandPrix* gps = init_GPs(data2);
 	
 	return 0;
-
-
-	//create struct while reading the data....
 }

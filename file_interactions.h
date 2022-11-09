@@ -64,6 +64,17 @@ int array_len_2(char** list){
 	return len;
 }
 
+/* Print char[][] NULL terminated */
+void print_array(char** a){
+	int i;
+	printf("\n");
+	for(i=0; a[i] != NULL; i++){
+		printf("%s\n",a[i]);
+	}
+	printf("NULL\n");
+}
+
+
 /* Read File to string */
 char* read_file(char* path){
 	int file = open(path, O_RDONLY);
@@ -88,43 +99,34 @@ char* read_file(char* path){
 	return out;
 }
 
-/* Print char[][] NULL terminated */
-void print_array(char** a){
-	int i;
-	printf("\n");
-	for(i=0; a[i] != NULL; i++){
-		printf("%s",a[i]);
-	}
-	printf("\n");
-}
-
 /* read given csv file*/
 /* lines begining by # are comments */
 /* into NULL terminated arrays */
 char*** read_CSV(char* path) {
-	char* tmp = read_file(path);
-	char** tmp2 = split(tmp, '\n'); //separate each line of file
-	char*** out;
+	char* file = read_file(path);
+	char** lines = split(file, '\n'); //separate each line of file
+	char*** data;
 
-	out = calloc(array_len_2(tmp2), sizeof(char**));
+	data = calloc(array_len_2(lines), sizeof(char**));
 
 	int i; int j;
-	for(i=0; tmp2[i] != NULL; i++) {
+	for(i=0; lines[i] != NULL; i++) {
 		//ignore comments
-		if(tmp2[i][0] == '#'){continue;}
+		if(lines[i][0] == '#'){continue;}
 
 		//split line in words
-		char** tmp3 = split(tmp2[i], ',');
-		out[i] = calloc(array_len_2(tmp3), sizeof(char*));
-		int max_j = array_len_2(tmp3);
+		char** words = split(lines[i], ',');
+		data[i] = calloc(array_len_2(words), sizeof(char*));
+		int max_j = array_len_2(words);
 		
-		for(j=0; j < max_j; j++) {
-			printf("%s\n", tmp3[j]);
-			out[i][j] = calloc(20, sizeof(char));
-			out[i][j] = tmp3[j];
-		} 
+		for(j=0; words[j] != NULL; j++) {
+			data[i][j] = calloc(40, sizeof(char));
+			data[i][j] = words[j];
+		}
+		data[i][j] = NULL;
 	}
-	return out;
+	data[i] = NULL;
+	return data;
 }
 
 /* read option file */

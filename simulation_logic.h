@@ -12,14 +12,13 @@ int array_len_1(char* list){
 	return len;
 }
 
-
 struct GrandPrix* init_GPs(char*** data) {
 	struct GrandPrix* out = malloc(sizeof(struct GrandPrix)*array_len_3(data));
 	int i;
 	for(i=0; data[i] != NULL; i++) {
 		out[i] = GP_init(data[i][0],atoi(data[i][1]),false);
 	}
-	out[i] = GP_init("NULL",0,true);
+	out[i] = GP_init("NULL",50,true);
 	return out;
 }
 
@@ -27,7 +26,6 @@ struct Car* init_CARs(char*** data) {
 	struct Car* out = malloc(sizeof(struct Car)*array_len_3(data));
 	int i;
 	for(i=0; data[i] != NULL; i++) {
-		printf("%s\n", data[i][0]);
 		out[i] = CAR_init(atoi(data[i][0]),data[i][1],data[i][2],false);
 	}
 	out[i] = CAR_init(0,"NULL","NULL",true);

@@ -105,6 +105,7 @@ char* read_file(char* path){
 char*** read_CSV(char* path) {
 	char* file = read_file(path);
 	char** lines = split(file, '\n'); //separate each line of file
+	free(file);
 	char*** data;
 
 	data = calloc(array_len_2(lines), sizeof(char**));
@@ -121,11 +122,14 @@ char*** read_CSV(char* path) {
 		
 		for(j=0; words[j] != NULL; j++) {
 			data[i][j] = calloc(40, sizeof(char));
-			data[i][j] = words[j];
+			strcpy(data[i][j],words[j]);
 		}
 		data[i][j] = NULL;
+
+		free(words);
 	}
 	data[i] = NULL;
+	free(lines);
 	return data;
 }
 

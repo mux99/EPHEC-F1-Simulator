@@ -36,12 +36,18 @@ int get_time() {
 int main(int argc, char const *argv[])
 {
 	//1
+	printf("%s\n", "1");
 	char*** data = read_CSV("data/cars.csv");
 	struct Car* cars = init_CARs(data);
+	free(data);
 
 	//2
+	printf("%s\n", "2");
 	char*** data2 = read_CSV("data/grand_prix.csv");
 	struct GrandPrix* gps = init_GPs(data2);
-	
+	free(data2);
+
+	printf("%s\n", "3");
+
 	return 0;
 }

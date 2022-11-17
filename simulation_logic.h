@@ -12,23 +12,34 @@ int array_len_1(char* list){
 	return len;
 }
 
-struct GrandPrix* init_GPs(char*** data) {
-	struct GrandPrix* out = malloc(sizeof(struct GrandPrix)*array_len_3(data));
+struct GrandPrix* init_GPs(char* data) {
+	char** lines = split(data, '\n');
+	char** words;
+	struct GrandPrix* out = calloc(array_len_2(lines), sizeof(struct GrandPrix));
 	int i;
-	for(i=0; data[i] != NULL; i++) {
-		out[i] = GP_init(data[i][0],atoi(data[i][1]),false);
+	for(i=0; lines[i] != NULL; i++) {
+		words = split(lines[i], ',');
+		print_array(words);
+		out[i] = GP_init(words[0],atoi(words[1]),false);
 	}
 	out[i] = GP_init("NULL",50,true);
+	free(lines);
+	free(words);
 	return out;
 }
 
-struct Car* init_CARs(char*** data) {
-	struct Car* out = malloc(sizeof(struct Car)*array_len_3(data));
+struct Car* init_CARs(char* data) {
+	char** lines = split(data, '\n');
+	char** words;
+	struct Car* out = calloc(array_len_2(lines), sizeof(struct Car));
 	int i;
-	for(i=0; data[i] != NULL; i++) {
-		out[i] = CAR_init(atoi(data[i][0]),data[i][1],data[i][2],false);
+	for(i=0; lines[i] != NULL; i++) {
+		words = split(lines[i], ',');
+		out[i] = CAR_init(atoi(words[0]),words[1],words[2],false);
 	}
 	out[i] = CAR_init(0,"NULL","NULL",true);
+	free(lines);
+	free(words);
 	return out;
 }
 

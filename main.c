@@ -37,15 +37,11 @@ int main(int argc, char const *argv[])
 {
 	//1
 	printf("%s\n", "1");
-	char*** data = read_CSV("data/cars.csv"); //retourne une matrice de tring malloc
-	struct Car* cars = init_CARs(data); //retourne une liste de struct
-	free(data);
+	struct Car* cars = init_CARs(read_file("data/cars.csv")); //retourne une liste de struct
 
 	//2
 	printf("%s\n", "2");
-	char*** data2 = read_CSV("data/grand_prix.csv"); //retourne une matrice de tring malloc
-	struct GrandPrix* gps = init_GPs(data2); //retourne une liste de struct
-	free(data2);
+	struct GrandPrix* gps = init_GPs(read_file("data/grand_prix.csv")); //retourne une liste de struct
 
 	printf("%s\n", "3");
 

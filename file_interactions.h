@@ -17,40 +17,15 @@ char** split(char* s, const char delim){
 	char** out = malloc(sizeof(char*));
 	char tmp2[strlen(s)];
 	int len = 1;
-	bool inside = false;
 	char separator[2]; separator[0] = delim; separator[1] = '\0';
 
 	//split
 	char* tmp = strtok(s,&delim);
 	while(tmp != NULL){
-		//concat end
-		if(inside && in_string(tmp)){
-			strcat(tmp2, separator);
-			strcat(tmp2, tmp);
-			inside = false;
-
-			out[len-1] = malloc(sizeof(char) * strlen(tmp2));
-			strcpy(out[len-1],tmp2);
-			len++;
-			out = realloc(out,sizeof(char* ) * len);
-		}
-		//concat mid
-		else if(inside){
-			strcat(tmp2, separator);
-			strcat(tmp2, tmp);
-		}
-		//concat start
-		else if(in_string(tmp)){
-			inside = true;
-			strcpy(tmp2, tmp);
-		}
-		//no concat
-		else{
-			out[len-1] = malloc(sizeof(char) * strlen(tmp)+1);
-			strcpy(out[len-1],tmp);
-			len++;
-			out = realloc(out,sizeof(char* ) * len);
-		}
+		out[len-1] = calloc(strlen(tmp)+1, sizeof(char));
+		strcpy(out[len-1],tmp);
+		len++;
+		out = realloc(out,sizeof(char* ) * len);
 		tmp = strtok(NULL,&delim);
 	}
 	out[len-1] = NULL;
@@ -86,7 +61,7 @@ char* read_file(char* path){
 	int file_len = stt.st_size;
 
 	//initialize out w/ correct length
-	char* out = malloc((file_len +1) * sizeof(char));
+	char* out = calloc(file_len +1, sizeof(char));
 	char tmp[file_len + 1];
 
 	//read file to tmp
@@ -102,13 +77,14 @@ char* read_file(char* path){
 /* read given csv file*/
 /* lines begining by # are comments */
 /* into NULL terminated arrays */
+/*
 char*** read_CSV(char* path) {
 	char* file = read_file(path);
 	char** lines = split(file, '\n'); //separate each line of file
 	free(file);
 	char*** data;
 
-	data = calloc(array_len_2(lines), sizeof(char**));
+	data = calloc(((array_len_2(lines))+1)*4*40, sizeof(char));
 
 	int i; int j;
 	for(i=0; lines[i] != NULL; i++) {
@@ -117,11 +93,11 @@ char*** read_CSV(char* path) {
 
 		//split line in words
 		char** words = split(lines[i], ',');
-		data[i] = calloc(array_len_2(words), sizeof(char*));
+		//data[i] = calloc(array_len_2(words), sizeof(char*));
 		int max_j = array_len_2(words);
 		
 		for(j=0; words[j] != NULL; j++) {
-			data[i][j] = calloc(40, sizeof(char));
+			//data[i][j] = calloc(40, sizeof(char));
 			strcpy(data[i][j],words[j]);
 		}
 		data[i][j] = NULL;
@@ -131,7 +107,7 @@ char*** read_CSV(char* path) {
 	data[i] = NULL;
 	free(lines);
 	return data;
-}
+}*/
 
 /* read option file */
 /* lines begining by # are comments */

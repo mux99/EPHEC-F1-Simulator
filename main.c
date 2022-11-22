@@ -45,5 +45,7 @@ int main(int argc, char const *argv[])
 
 	printf("%s\n", "3");
 
+	weekend1();
+
 	return 0;
 }

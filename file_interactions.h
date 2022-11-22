@@ -22,6 +22,7 @@ char** split(char* s, const char delim){
 	//split
 	char* tmp = strtok(s,&delim);
 	while(tmp != NULL){
+		printf("%s\n",tmp);
 		out[len-1] = calloc(strlen(tmp)+1, sizeof(char));
 		strcpy(out[len-1],tmp);
 		len++;

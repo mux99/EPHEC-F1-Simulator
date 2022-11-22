@@ -15,16 +15,14 @@ int in_string(char* str){
 /* into NULL terminated array */
 char** split(char* s, const char delim){
 	char** out = malloc(sizeof(char*));
-	char tmp2[strlen(s)];
 	int len = 1;
 	char separator[2]; separator[0] = delim; separator[1] = '\0';
-
+	printf("%s\n-------------------------------------------------\n",s);
 	//split
 	char* tmp = strtok(s,&delim);
 	while(tmp != NULL){
-		printf("%s\n",tmp);
 		out[len-1] = calloc(strlen(tmp)+1, sizeof(char));
-		strcpy(out[len-1],tmp);
+		out[len-1] = tmp;
 		len++;
 		out = realloc(out,sizeof(char* ) * len);
 		tmp = strtok(NULL,&delim);

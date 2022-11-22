@@ -15,11 +15,10 @@ int array_len_1(char* list){
 struct GrandPrix* init_GPs(char* data) {
 	char** lines = split(data, '\n');
 	char** words;
-	struct GrandPrix* out = calloc(array_len_2(lines), sizeof(struct GrandPrix));
+	struct GrandPrix* out = malloc(array_len_2(lines) * sizeof(struct GrandPrix));
 	int i;
 	for(i=0; lines[i] != NULL; i++) {
 		words = split(lines[i], ',');
-		print_array(words);
 		out[i] = GP_init(words[0],atoi(words[1]),false);
 	}
 	out[i] = GP_init("NULL",50,true);

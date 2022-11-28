@@ -1,11 +1,18 @@
 struct Car {
 	bool is_null;
+	//data
 	int number;
 	char* driver;
 	char* team;
 
+	//flags
+	bool is_out;
+	bool is_pit;
+
+	//scores
 	int points;
-}number, driver, team, points;
+
+};
 
 
 struct Car CAR_init(int number, char* driver, char* team, bool is_null) {
@@ -14,5 +21,7 @@ struct Car CAR_init(int number, char* driver, char* team, bool is_null) {
 	out.driver = driver;
 	out.team = team;
 	out.is_null = is_null;
+	out.is_out = false;
+	out.is_pit = false;
 	return out;
 }

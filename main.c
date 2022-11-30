@@ -14,28 +14,24 @@
 #include "struct_CAR.h"
 #include "struct_GP.h"
 #include "file_interactions.h"
+#include "car_sim.h"
 #include "simulation_logic.h"
+
+//
+//	EPHEC TI-02 OS
+//project:
+//	simulate a F1 racing championchip 
+//
 
 //ALL TIMES IN ms
 //ALL DISTENCES IN m
 
-/*
-int maxArray(int* array){
-    int max = 0;
-    for(int i = 0; array[i] != NULL; i++){
-        if(array[i] > max){
-            max = array[i];
-        }
-    }
-    return max;
-}
-*/
-
 /* ----MAIN----*/
 int main(int argc, char const *argv[])
 {
-	char* cars_file = "date/cars.csv";
-	char* gps_file = "date/grand_prix.csv";
+	printf("---running---\n");
+	char* cars_file = "data/cars.csv";
+	char* gps_file = "data/grand_prix.csv";
 
 	int len_cars = countlines(cars_file);
 	int len_gps = countlines(gps_file);
@@ -51,13 +47,14 @@ int main(int argc, char const *argv[])
 	cars = init_CARs(read_file(cars_file));
 	gps = init_GPs(read_file(gps_file),len_cars);
 
+	printf("---init done---\n");
 	int i;
 	for (i=0; gps[i].is_null != false; i++){
 		if (gps[i].weekend_type == 1){
-			weekend1(i);
+			weekend1(gps[i],cars);
 		}
 		else if (gps[i].weekend_type == 2){
-			weekend2(i);
+			weekend2(gps[i],cars);
 		}
 	}
 

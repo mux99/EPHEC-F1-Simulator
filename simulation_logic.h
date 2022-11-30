@@ -5,10 +5,6 @@ int array_len_1(char* list){
 	return len;
 }
 
-int get_time() {
-	return rand() % ( + 1 - 25000) + 25000;
-};
-
 struct GrandPrix* init_GPs(char* data, int car_lenght) {
 	char** lines = split(data, "\r");
 	char** words;
@@ -39,34 +35,43 @@ struct Car* init_CARs(char* data) {
 	return out;
 }
 
-void practice(int curent_gp) {
+void practice(struct GrandPrix gp, struct Car* cars) {
+	printf("---practice---\n");
 	int i;
-	for (i=0; cars[i].is_null != false; i++){
-		
+	int pid = 0;
+	for (i=0; cars[i].is_null != false; i++) {
+		pid = fork();
+		if (pid == 0){
+			car_sim_practice(i,gp,cars,3600000,0);
+			break;
+		}
+	}
+	if (pid > 0) {
+		printf("main\n");
 	}
 }
 
-void qualifications(int curent_gp) {
+void qualifications(struct GrandPrix gp, struct Car* cars) {
 
 }
 
-void sprint(int curent_gp) {
+void sprint(struct GrandPrix gp, struct Car* cars) {
 
 }
 
-void race(int curent_gp) {
+void race(struct GrandPrix gp, struct Car* cars) {
 
 }
 
-void weekend1(int curent_gp) {
-	practice(curent_gp);
-	qualifications(curent_gp);
-	race(curent_gp);
+void weekend1(struct GrandPrix gp, struct Car* cars) {
+	practice(gp, cars);
+	qualifications(gp, cars);
+	race(gp, cars);
 }
 
-void weekend2(int curent_gp) {
-	practice(curent_gp);
-	qualifications(curent_gp);
-	sprint(curent_gp);
-	race(curent_gp);
+void weekend2(struct GrandPrix gp, struct Car* cars) {
+	practice(gp, cars);
+	qualifications(gp, cars);
+	sprint(gp, cars);
+	race(gp, cars);
 }

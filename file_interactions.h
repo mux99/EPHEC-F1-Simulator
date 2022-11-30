@@ -95,7 +95,7 @@ char* read_file(char* path){
 /* read given csv file*/
 /* lines begining by # are comments */
 /* into NULL terminated arrays */
-/*
+/* REMOVED -- bad use of char*** found another way
 char*** read_CSV(char* path) {
 	char* file = read_file(path);
 	char** lines = split(file, '\n'); //separate each line of file

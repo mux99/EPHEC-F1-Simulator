@@ -17,15 +17,12 @@ struct GrandPrix {
 
 	//qualifs
 	int* qualifications_1_laps; //1
-	int* qualifications_1_time;
 	int* qualifications_1_best_lap;
 
 	int* qualifications_2_laps; //2
-	int* qualifications_2_time;
 	int* qualifications_2_best_lap;
 
 	int* qualifications_3_laps; //3
-	int* qualifications_3_time;
 	int* qualifications_3_best_lap;
 
 	//sprint
@@ -52,13 +49,10 @@ struct GrandPrix GP_init(char* location, int track_lenght, int weekend_type, int
 	if (car_lenght > 0) {
 		out.practice = calloc(car_lenght, sizeof(int));
 		out.qualifications_1_laps = calloc(car_lenght, sizeof(int));
-		out.qualifications_1_time = calloc(car_lenght, sizeof(int));
 		out.qualifications_1_best_lap = calloc(car_lenght, sizeof(int));
 		out.qualifications_2_laps = calloc(car_lenght, sizeof(int));
-		out.qualifications_2_time = calloc(car_lenght, sizeof(int));
 		out.qualifications_2_best_lap = calloc(car_lenght, sizeof(int));
 		out.qualifications_3_laps = calloc(car_lenght, sizeof(int));
-		out.qualifications_3_time = calloc(car_lenght, sizeof(int));
 		out.qualifications_3_best_lap = calloc(car_lenght, sizeof(int));
 		out.sprint_laps = calloc(car_lenght, sizeof(int));
 		out.sprint_time = calloc(car_lenght, sizeof(int));

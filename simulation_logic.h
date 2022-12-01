@@ -8,13 +8,13 @@ int array_len_1(char* list){
 struct GrandPrix* init_GPs(char* data, int car_lenght) {
 	char** lines = split(data, "\r");
 	char** words;
-	struct GrandPrix* out = malloc(array_len_2(lines) * sizeof(struct GrandPrix));
+	struct GrandPrix* out;
 	int i;
 	for(i=0; lines[i] != NULL; i++) {
 		words = split(lines[i], ",");
-		out[i] = GP_init(words[0],atoi(words[1]),atoi(words[2]),car_lenght,false);
+		out[i] = GP_init(i, words[0],atoi(words[1]),atoi(words[2]),car_lenght,false);
 	}
-	out[i] = GP_init("NULL",50,1,0,true);
+	out[i] = GP_init(i,"NULL",50,1,0,true);
 	free(lines);
 	free(words);
 	return out;
@@ -23,7 +23,7 @@ struct GrandPrix* init_GPs(char* data, int car_lenght) {
 struct Car* init_CARs(char* data) {
 	char** lines = split(data, "\n");
 	char** words;
-	struct Car* out = calloc(array_len_2(lines), sizeof(struct Car));
+	struct Car* out;
 	int i;
 	for(i=0; lines[i] != NULL; i++) {
 		words = split(lines[i], ",");
@@ -35,43 +35,49 @@ struct Car* init_CARs(char* data) {
 	return out;
 }
 
-void practice(struct GrandPrix gp, struct Car* cars) {
+void practice(int gp, int len_cars) {
 	printf("---practice---\n");
 	int i;
-	int pid = 0;
-	for (i=0; cars[i].is_null != false; i++) {
+	pid_t pid = 0;
+	int n = 0;
+	for (i=0; i < len_cars; i++) {
+		n++;
 		pid = fork();
-		if (pid == 0){
-			car_sim_practice(i,gp,cars,3600000,0);
-			break;
+		if (pid > 0) {
+			car_sim_practice(i,gp,3600000,0);
+			exit(0);
 		}
 	}
-	if (pid > 0) {
-		printf("main\n");
+	int status;
+	while (n > 0) {
+		pid = wait(&status);
+		--n;
 	}
+	printf("---end practice---");
 }
 
-void qualifications(struct GrandPrix gp, struct Car* cars) {
-
-}
-
-void sprint(struct GrandPrix gp, struct Car* cars) {
+void qualifications(int gp, int len_cars) {
 
 }
 
-void race(struct GrandPrix gp, struct Car* cars) {
+void sprint(int gp, int len_cars) {
 
 }
 
-void weekend1(struct GrandPrix gp, struct Car* cars) {
-	practice(gp, cars);
-	qualifications(gp, cars);
-	race(gp, cars);
+void race(int gp, int len_cars) {
+
 }
 
-void weekend2(struct GrandPrix gp, struct Car* cars) {
-	practice(gp, cars);
-	qualifications(gp, cars);
-	sprint(gp, cars);
-	race(gp, cars);
+void weekend1(int gp, int len_cars) {
+	printf("---weekend1---\n");
+	practice(gp, len_cars);
+	qualifications(gp, len_cars);
+	race(gp, len_cars);
+}
+
+void weekend2(int gp, int len_cars) {
+	practice(gp, len_cars);
+	qualifications(gp, len_cars);
+	sprint(gp, len_cars);
+	race(gp, len_cars);
 }

@@ -37,8 +37,7 @@ int countlines(char *filename)
   int ch=0;
   int lines=0;
 
-  if (fp == NULL);
-  return 0;
+  if (fp == NULL) {return 0;}
 
   lines++;
   while ((ch = fgetc(fp)) != EOF)
@@ -63,6 +62,15 @@ void print_array(char** a){
 	printf("\n");
 	for(i=0; a[i] != NULL; i++){
 		printf("%s\n",a[i]);
+	}
+	printf("NULL\n");
+}
+
+void print_array_int(int* a){
+	int i;
+	printf("\n");
+	for(i=0; a[i] != end; i++){
+		printf("%d,",a[i]);
 	}
 	printf("NULL\n");
 }

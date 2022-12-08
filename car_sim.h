@@ -1,14 +1,13 @@
 float get_time()
 {
-	float tmp = (float)rand()/RAND_MAX;
-	return (float)(tmp*21000 + 25000)/1000;
+	return ((float)rand()/(float)(RAND_MAX/21.0))+25.0;
 }
 
 void car_sim_practice(int i, int length, int gp)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
-	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
 	int total_time = 0;
@@ -19,7 +18,7 @@ void car_sim_practice(int i, int length, int gp)
 		for (j = 0; j < 3; j++)
 		{
 			float tmp = get_time();
-			unsigned int time_to_sleep = tmp/speed;
+			unsigned int time_to_sleep = tmp*speed;
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
@@ -41,7 +40,7 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
-	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
 	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
@@ -59,7 +58,7 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 		for (j = 0; j < 3; j++)
 		{
 			float tmp = get_time();
-			unsigned int time_to_sleep = tmp/speed;
+			unsigned int time_to_sleep = tmp*speed;
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
@@ -86,7 +85,7 @@ void car_sim_sprint(int i, int gp, int length)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
-	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
 	int total_time = 0;
@@ -98,7 +97,7 @@ void car_sim_sprint(int i, int gp, int length)
 		for (j=0; j < 3; j++)
 		{
 			float tmp = get_time();
-			unsigned int time_to_sleep = tmp/speed;
+			unsigned int time_to_sleep = tmp*speed;
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
@@ -117,7 +116,7 @@ void car_sim_race(int i, int gp, int length)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
-	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
 	int total_time = 0;
@@ -129,7 +128,7 @@ void car_sim_race(int i, int gp, int length)
 		for (j=0; j < 3; j++)
 		{
 			float tmp = get_time();
-			unsigned int time_to_sleep = tmp/speed;
+			unsigned int time_to_sleep = tmp*speed;
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;

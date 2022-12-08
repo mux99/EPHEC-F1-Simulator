@@ -12,7 +12,7 @@
 
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
-const int speed = 10;
+const float speed = 0.05;
 const int end = -1;
 int shm_key = 33;
 
@@ -65,7 +65,7 @@ int main(int argc, char const *argv[])
 	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), IPC_CREAT | 0666);
 	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
-	int shmid_data = shmget(shm_key + 2, len_data * sizeof(int), IPC_CREAT | 0666);
+	int shmid_data = shmget(shm_key + 2, len_data * sizeof(float), IPC_CREAT | 0666);
 	float *data = shmat(shmid_data, NULL, 0);
 
 	// init structs lists

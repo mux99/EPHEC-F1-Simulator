@@ -21,7 +21,8 @@ int* sort(float* data)
         int min = -1;
         for (j=0;j<len;j++)
         {
-            if ((data_cp[j] >= 0 && data_cp[j] < data_cp[min]) || min == -1)
+            if (data_cp[j] == -1) continue;
+            if (data_cp[j] < data_cp[min] || min == -1)
             {
                 min = j;
             }
@@ -83,37 +84,42 @@ void display(int gp)
 	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), 0666);
 	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
-	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, NULL, 0);
-
+    
     while (0 == 0)
     {
-        system("clear");
         if (gps[gp].GP_state == 0)
         {
+            system("clear");
             get_scoreboard_practice(len_cars,cars,data,gps[gp]);
         }
         else if (gps[gp].GP_state == 1)
         {
+            system("clear");
             get_scoreboard_qualifs(len_cars);
         }
         else if (gps[gp].GP_state == 2)
         {
+            system("clear");
             get_scoreboard_qualifs(len_cars);
         }
         else if (gps[gp].GP_state == 3)
         {
+            system("clear");
             get_scoreboard_qualifs(len_cars);
         }
         else if (gps[gp].GP_state == 4)
         {
+            system("clear");
             get_scoreboard_sprint(len_cars);
         }
         else if (gps[gp].GP_state == 5)
         {
+            system("clear");
             get_scoreboard_race(len_cars);
         }
-        else {
+        else if (gps[gp].GP_state == 100){
             exit(0);
         }
         sleep(1);

@@ -9,11 +9,10 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <time.h>
-//#include <sys/types.h>
 
-char* cars_file = "data/cars.csv";
-char* gps_file = "data/grand_prix.csv";
-const int speed = 60;
+char *cars_file = "data/cars.csv";
+char *gps_file = "data/grand_prix.csv";
+const int speed = 10;
 const int end = -1;
 int shm_key = 33;
 
@@ -26,12 +25,29 @@ int shm_key = 33;
 
 //
 //	EPHEC TI-02 OS
-//project:
-//	simulate a F1 racing championchip 
+// project:
+//	simulate a F1 racing championchip
 //
 
-//ALL TIMES IN ms
-//ALL DISTENCES IN m
+// ALL TIMES IN ms
+// ALL DISTENCES IN m
+
+//MEMO on int *data:
+//
+//-0- practice best lap
+//-1- practice lap count
+//-2- qualifications round 1 best lap
+//-3- qualifications round 2 best lap
+//-4- qualifications round 3 best lap
+//-5- sprint best lap
+//-6- race best lap
+//-7- race time
+//-8-
+//-9-
+//-10-
+//-11- S1 best
+//-12- S2 best
+//-13- S3 best
 
 /* ----MAIN----*/
 int main(int argc, char const *argv[])
@@ -40,44 +56,39 @@ int main(int argc, char const *argv[])
 
 	int len_cars = countlines(cars_file);
 	int len_gps = countlines(gps_file);
-	int len_data = (len_cars+1) * 14 * len_gps;
+	int len_data = (len_cars + 1) * 14;
 
-	//init cars shared memory
-	int shmid_cars = shmget(shm_key,len_cars * sizeof(struct Car), IPC_CREAT | 0666);
-	struct Car* cars = shmat(shmid_cars,0,0);
+	// init cars shared memory
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
 
-	int shmid_gps = shmget(shm_key,len_gps * sizeof(struct Car), IPC_CREAT | 0666);
-	struct GrandPrix* gps = shmat(shmid_gps,0,0);
+	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), IPC_CREAT | 0666);
+	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
-	int shmid_data = shmget(shm_key,len_data * sizeof(int), IPC_CREAT | 0666);
-	int* data = shmat(shmid_data,0,0);
+	int shmid_data = shmget(shm_key + 2, len_data * sizeof(int), IPC_CREAT | 0666);
+	float *data = shmat(shmid_data, NULL, 0);
 
-	int i;
-	for (i=0; i < len_data; i++) {
-		if ((i%len_cars == 0) && (i > 0)){
-			data[i] = end;
-		}
-		else {
-			data[i] = 0;
-		}
-	}
-
-	//init structs lists
-	cars = init_CARs(read_file(cars_file));
-	gps = init_GPs(read_file(gps_file),len_cars);
+	// init structs lists
+	init_CARs(cars,read_file(cars_file));
+	init_GPs(gps,read_file(gps_file), len_cars);
 
 	printf("---init done---\n");
-	weekend1(0,len_cars);
+	weekend1(0, len_cars, len_gps, data, cars);
 	// for (i=0; gps[i].is_null == false; i++){
 	// 	if (gps[i].weekend_type == 1){
-	// 		weekend1(i,len_cars);
+	// 		weekend1(i,len_cars, len_gps,data, cars);
 	// 	}
 	// 	else if (gps[i].weekend_type == 2){
-	// 		weekend2(i,len_cars);
+	// 		weekend2(i,len_cars, len_gps,data, cars);
 	// 	}
 	// }
 
 	shmdt(gps);
+	shmctl(shmid_gps,IPC_RMID,0);
 	shmdt(cars);
+	shmctl(shmid_cars,IPC_RMID,0);
+	shmdt(data);
+	shmctl(shmid_data,IPC_RMID,0);
+	printf("---finished---\n");
 	return 0;
 }

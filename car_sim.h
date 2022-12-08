@@ -1,67 +1,146 @@
-int get_time() {
-	return rand() % ( + 1 - 25000) + 25000;
-};
-
-void car_sim_race(int i, int gp, struct Car* cars, int length, int step) {
-    srand(time(NULL));
-    int total_time = 0;
-    int lap_count = 0;
-    while (lap_count < length)
-    {   
-        int i;
-        for (i=0; i < 3; i++) {
-            //---TBD---
-        }
-    }
+float get_time()
+{
+	float tmp = (float)rand()/RAND_MAX;
+	return (float)(tmp*21000 + 25000)/1000;
 }
 
-void car_sim_practice(int i, int gp, int length, int step) {
-    int len_gps = countlines(gps_file);
-    int len_cars = countlines(cars_file);
-	int shmid_gps = shmget(shm_key,len_gps * sizeof(struct Car), 0666);
-	struct GrandPrix* gps = shmat(shmid_gps,0,0);
-    int shmid_data = shmget(shm_key,(len_cars+1) * 14 * sizeof(int), 0666);
-	int* data = shmat(shmid_data,0,0);
+void car_sim_practice(int i, int length, int gp)
+{
+	srand(time(NULL)+getpid());
+	int len_cars = countlines(cars_file);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	float *data = shmat(shmid_data, 0, 0);
 
-    srand(time(NULL));
-    int total_time = 0;
-    int lap_time = 0;
-    while (total_time < length) {
-        int i;
-        for (i=0; i < 3; i++) {
-            int tmp = get_time();
-            total_time += tmp;
-            lap_time += tmp;
-        }
-        switch (step)
-        {
-        case 0:
-            if (lap_time > data[gps[gp].practice+i]) {
-                data[gps[gp].practice+i] = lap_time; 
-            }
-            break;
-        case 1:
-            data[gps[gp].qualif_1_laps+i]++;
-            if (lap_time > data[gps[gp].qualif_1_best_lap+i]) {
-                data[gps[gp].qualif_1_best_lap+i] = lap_time;
-            }
-            break;
-        case 2:
-            data[gps[gp].qualif_2_laps+i]++;
-            if (lap_time > data[gps[gp].qualif_2_best_lap+i]) {
-                data[gps[gp].qualif_2_best_lap+i] = lap_time;
-            }
-            break;
-        case 3:
-            data[gps[gp].qualif_3_laps+i]++;
-            if (lap_time > data[gps[gp].qualif_3_best_lap+i]) {
-                data[gps[gp].qualif_3_best_lap+i] = lap_time;
-            }
-            break;
-        }
-        lap_time = 0;
-    }
+	int total_time = 0;
+	while (total_time < length)
+	{
+		int lap_time = 0;
+		int j;
+		for (j = 0; j < 3; j++)
+		{
+			float tmp = get_time();
+			unsigned int time_to_sleep = tmp/speed;
+			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
+			total_time += tmp;
+			lap_time += tmp;
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+				data[((j+11)*(len_cars+1))+i] = tmp;
+			}
+		}
+		data[len_cars+1+i]++;
+		if (lap_time < data[i] || data[i] == 0)
+		{
+			data[i] = lap_time;
 
-    shmdt(gps);
-    shmdt(data);
+		}
+	}
+	shmdt(data);
+}
+
+void car_sim_qualifs(int i, int gp, int length, int step)
+{
+	srand(time(NULL)+getpid());
+	int len_cars = countlines(cars_file);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	float *data = shmat(shmid_data, 0, 0);
+
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
+
+	if (cars[i].is_out_qualifs == true){
+		return;
+	}
+
+	int total_time = 0;
+	while (total_time < length)
+	{
+		int lap_time = 0;
+		int j;
+		for (j = 0; j < 3; j++)
+		{
+			float tmp = get_time();
+			unsigned int time_to_sleep = tmp/speed;
+			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
+			total_time += tmp;
+			lap_time += tmp;
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+				data[((j+11)*(len_cars+1))+i] = tmp;
+			}
+		}
+		if ((step == 0) && ((lap_time < data[len_cars+1+i]) || data[i] == 0))
+		{
+			data[len_cars+1+i] = lap_time;
+		}
+		else if ((step == 1) && ((lap_time < data[((len_cars+1)*2)+i]) || data[i] == 0))
+		{
+			data[((len_cars+1)*2)+i] = lap_time;
+		}
+		else if ((step == 2) && ((lap_time < data[((len_cars+1)*3)+i]) || data[i] == 0))
+		{
+			data[((len_cars+1)*3)+i] = lap_time;
+		}
+	}
+}
+
+void car_sim_sprint(int i, int gp, int length)
+{
+	srand(time(NULL)+getpid());
+	int len_cars = countlines(cars_file);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	float *data = shmat(shmid_data, 0, 0);
+
+	int total_time = 0;
+	int lap_count;
+	for (lap_count=0;lap_count < length;lap_count++)
+	{
+		int j;
+		int lap_time = 0;
+		for (j=0; j < 3; j++)
+		{
+			float tmp = get_time();
+			unsigned int time_to_sleep = tmp/speed;
+			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
+			total_time += tmp;
+			lap_time += tmp;
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+				data[((j+11)*(len_cars+1))+i] = tmp;
+			}
+		}
+		if (lap_time < data[(4*(len_cars+1))+i] || data[i] == 0)
+		{
+			data[(4*(len_cars+1))+i] = lap_time;
+		}
+	}
+}
+
+void car_sim_race(int i, int gp, int length)
+{
+	srand(time(NULL)+getpid());
+	int len_cars = countlines(cars_file);
+	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(int), 0666);
+	float *data = shmat(shmid_data, 0, 0);
+
+	int total_time = 0;
+	int lap_count;
+	for (lap_count=0;lap_count < length;lap_count++)
+	{
+		int j;
+		int lap_time = 0;
+		for (j=0; j < 3; j++)
+		{
+			float tmp = get_time();
+			unsigned int time_to_sleep = tmp/speed;
+			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
+			total_time += tmp;
+			lap_time += tmp;
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+				data[((j+11)*(len_cars+1))+i] = tmp;
+			}
+		}
+		if (lap_time < data[(5*(len_cars+1))+i] || data[i] == 0)
+		{
+			data[(5*(len_cars+1))+i] = lap_time;
+			data[(6*(len_cars+1))+i] = total_time;
+		}
+	}
 }

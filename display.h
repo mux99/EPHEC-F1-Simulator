@@ -1,10 +1,40 @@
 int* sort(float* data)
 {
-    
+    int i;
+
+    //evaluate data length
+    int len = 0;
+    for (i=0; data[i] != end; i++) len++;
+
+    //making a sacrificial copy of data
+    float data_cp[len];
+    for (i=0; data[i] != end; i++)
+    {
+        data_cp[i] = data[i];
+    }
+    //finding the lowests
+    int* out = calloc(len+1,sizeof(int));
+    out[len] = end;
+    for (i=0;i<len;i++)
+    {
+        int j;
+        int min = -1;
+        for (j=0;j<len;j++)
+        {
+            if ((data_cp[j] >= 0 && data_cp[j] < data_cp[min]) || min == -1)
+            {
+                min = j;
+            }
+        }
+        out[i] = min;
+        data_cp[min] = -1;
+    }
+    return out;
 }
 
 void get_scoreboard_practice(int len_cars, struct Car* cars, float* data, struct GrandPrix gp)
 {
+    int* order = sort(data);
     int i;
     printf("+------------------------------------------------------------+\n");
     printf("|PRACTICE %40s Grand Prix|\n",gp.location);
@@ -15,15 +45,16 @@ void get_scoreboard_practice(int len_cars, struct Car* cars, float* data, struct
     {
 
         printf("|%2d|%16s|%3d|%13s|%8.3f|%8.3f|%4d|\n",
-            i,
-            cars[i].driver,
-            cars[i].number,
-            cars[i].team,
-            data[i],
-            i > 0 ? data[i]-data[i-1] : 0,
-            (int)data[len_cars+1+i]);
+            i+1,
+            cars[order[i]].driver,
+            cars[order[i]].number,
+            cars[order[i]].team,
+            data[order[i]],
+            i > 0 ? data[order[i]]-data[order[i-1]] : 0,
+            (int)data[len_cars+1+order[i]]);
     }
     printf("+--+----------------+---+-------------+--------+--------+----+\n");
+    free(order);
 }
 
 void get_scoreboard_qualifs(int len_cars)

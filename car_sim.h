@@ -162,8 +162,9 @@ void car_sim_race(int i, int gp, int length)
 		}
 		if (lap_time < data[(5*(len_cars+1))+i] || data[i] == 0)
 		{
-			data[(5*(len_cars+1))+i] = lap_time;
-			data[(6*(len_cars+1))+i] = total_time;
+			data[(7*(len_cars+1))+i] = lap_time;
 		}
+		data[(9*(len_cars+1))+i]++;
+		data[(8*(len_cars+1))+i] = total_time;
 	}
 }

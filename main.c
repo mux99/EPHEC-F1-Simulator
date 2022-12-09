@@ -13,7 +13,7 @@
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
 char *output_dir = "output/";
-const float speed = 0; // 0 <= value < 45
+const float speed = 40; // 0 <= value < 45
 
 
 
@@ -42,7 +42,7 @@ int shm_key = 33;
 //MEMO on int *data:
 //
 //-0- practice best lap
-//-1- practice lap count
+//-1- practice lap count (re used by qualifications)
 //-2- qualifications round 1 best lap
 //-3- qualifications round 2 best lap
 //-4- qualifications round 3 best lap
@@ -50,8 +50,8 @@ int shm_key = 33;
 //-6- race start positions (! not position by car but car by position)
 //-7- race best lap
 //-8- race time
-//-9-
-//-10-
+//-9- race lap count (also used by sprint)
+//-10- sprint time
 //-11- S1 best (re-used for each step)
 //-12- S2 best (re-used for each step)
 //-13- S3 best (re-used for each step)

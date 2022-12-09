@@ -149,26 +149,26 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	// 	ask_save();
 	// }
 
-	// Q1
-	gps[gp].GP_state = 2;
-	qualifications(gp, len_cars, 0, 1080);
-	gps[gp].GP_state = -2;
-	qualify(data,cars,len_cars,1);
-	ask_save();
+	// // Q1
+	// gps[gp].GP_state = 2;
+	// qualifications(gp, len_cars, 0, 1080);
+	// gps[gp].GP_state = -2;
+	// qualify(data,cars,len_cars,1);
+	// ask_save();
 
-	// Q2
-	gps[gp].GP_state = 3;
-	qualifications(gp, len_cars, 1, 900);
-	gps[gp].GP_state = -3;
-	qualify(data,cars,len_cars,2);
-	ask_save();
+	// // Q2
+	// gps[gp].GP_state = 3;
+	// qualifications(gp, len_cars, 1, 900);
+	// gps[gp].GP_state = -3;
+	// qualify(data,cars,len_cars,2);
+	// ask_save();
 
-	// Q3
-	gps[gp].GP_state = 4;
-	qualifications(gp, len_cars, 2, 720);
-	gps[gp].GP_state = -4;
-	qualify(data,cars,len_cars,3);
-	ask_save();
+	// // Q3
+	// gps[gp].GP_state = 4;
+	// qualifications(gp, len_cars, 2, 720);
+	// gps[gp].GP_state = -4;
+	// qualify(data,cars,len_cars,3);
+	// ask_save();
 
 	// if (type == 2)
 	// {
@@ -185,11 +185,11 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	// 	ask_save();
 	// }
 
-	// // RACE
-	// gps[gp].GP_state = 6;
-	// race(gp, len_cars, gps[gp].race_laps_number);
-	// gps[gp].GP_state = -6;
-	// ask_save();
+	// RACE
+	gps[gp].GP_state = 6;
+	race(gp, len_cars, gps[gp].race_laps_number);
+	gps[gp].GP_state = -6;
+	ask_save();
 
 	// end gp
 	gps[gp].GP_state = 100;

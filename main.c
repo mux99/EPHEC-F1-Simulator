@@ -13,7 +13,10 @@
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
 char *output_dir = "output/";
-const float speed = 0.03; //min: 0.03 (smaller is instant)
+const float speed = 0; // 0 <= value < 45
+
+
+
 const int end = -1;
 int shm_key = 33;
 
@@ -44,7 +47,7 @@ int shm_key = 33;
 //-3- qualifications round 2 best lap
 //-4- qualifications round 3 best lap
 //-5- qualifications lap count
-//-6- sprint best lap
+//-6- race start positions (! not position by car but car by position)
 //-7- race best lap
 //-8- race time
 //-9-

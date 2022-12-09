@@ -8,7 +8,8 @@ struct Car {
 	//flags
 	bool is_out;
 	bool is_pit;
-	bool is_out_qualifs;
+	bool is_out_q2;
+	bool is_out_q3;
 
 	//scores
 	int points;
@@ -16,15 +17,16 @@ struct Car {
 };
 
 
-struct Car CAR_init(int number, char* driver, char* team, bool is_null) {
+struct Car CAR_init(int number, char* driver, char* team, bool is_null, bool is_out) {
 	struct Car out;
 	out.number = number;
 	out.driver = driver;
 	out.team = team;
 	out.is_null = is_null;
-	out.is_out = false;
+	out.is_out = is_out;
 	out.is_pit = false;
-	out.is_out_qualifs = false;
+	out.is_out_q2 = false;
+	out.is_out_q3 = false;
 	return out;
 }
 
@@ -36,9 +38,8 @@ void init_CARs(struct Car* cars, char *data)
 	for (i = 0; lines[i] != NULL; i++)
 	{
 		words = split(lines[i], ",");
-		cars[i] = CAR_init(atoi(words[0]), words[1], words[2], false);
+		cars[i] = CAR_init(atoi(words[0]), words[1], words[2], false, atoi(words[3]) == 0 ? false : true);
 	}
-	cars[i] = CAR_init(0, "NULL", "NULL", true);
 	free(lines);
 	free(words);
 }

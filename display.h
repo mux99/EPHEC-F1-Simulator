@@ -37,24 +37,27 @@ void get_scoreboard_practice(int len_cars, struct Car* cars, float* data, struct
 {
     int* order = sort(data);
     int i;
-    printf("+------------------------------------------------------------+\n");
-    printf("|PRACTICE %40s Grand Prix|\n",gp.location);
-    printf("+--+----------------+---+-------------+--------+--------+----+\n");
-    printf("|%2s|%16s|%3s|%13s|%8s|%8s|%4s|\n","/","driver","num","team","best lap","diff","laps");
-    printf("+--+----------------+---+-------------+--------+--------+----+\n");
+    printf("╔═══════════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║PRACTICE %40s Grand Prix║\n",gp.location);
+    printf("╠══╦════════════════╦═══╦═════════════╦════════╦════════╦════╦════════╦════════╦════════╣\n");
+    printf("║%2s│%16s│%3s│%13s│%8s│%8s│%4s│%8s│%8s│%8s║\n","/","driver","num","team","best lap","diff","laps","best s1","best s2","best s3");
+    printf("╠══╬════════════════╬═══╬═════════════╬════════╬════════╬════╬════════╬════════╬════════╣\n");
     for (i=0;i<len_cars;i++)
     {
 
-        printf("|%2d|%16s|%3d|%13s|%8.3f|%8.3f|%4d|\n",
+        printf("║%2d│%16s│%3d│%13s│%8.3f│%8.3f│%4d│%8.3f│%8.3f│%8.3f║\n",
             i+1,
             cars[order[i]].driver,
             cars[order[i]].number,
             cars[order[i]].team,
             data[order[i]],
             i > 0 ? data[order[i]]-data[order[i-1]] : 0,
-            (int)data[len_cars+1+order[i]]);
+            (int)data[len_cars+1+order[i]],
+            data[11*(len_cars+1)+order[i]],
+            data[12*(len_cars+1)+order[i]],
+            data[13*(len_cars+1)+order[i]]);
     }
-    printf("+--+----------------+---+-------------+--------+--------+----+\n");
+    printf("╚══╩════════════════╩═══╩═════════════╩════════╩════════╩════╩════════╩════════╩════════╝\n");
     free(order);
 }
 

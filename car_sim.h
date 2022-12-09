@@ -7,6 +7,9 @@ void car_sim_practice(int i, int length, int gp)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
+
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
@@ -90,6 +93,9 @@ void car_sim_sprint(int i, int gp, int length)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
+
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
@@ -125,13 +131,16 @@ void car_sim_race(int i, int gp, int length)
 {
 	srand(time(NULL)+getpid());
 	int len_cars = countlines(cars_file);
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
+	
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
 	if (cars[i].is_out == true){
 		return;
 	}
-	
+
 	float total_time = 0;
 	int lap_count;
 	for (lap_count=0;lap_count < length;lap_count++)

@@ -2,7 +2,7 @@
 
 void practice(int gp, int len_cars)
 {
-	int i;
+	int i; int status;
 	pid_t pid_childs[len_cars];
 	for (i = 0; i < len_cars; i++)
 	{
@@ -14,16 +14,12 @@ void practice(int gp, int len_cars)
 		}
 		else if (pid > 0) pid_childs[i] = pid;
 	}
-	int status;
-	for (i = 0; i < len_cars; i++)
-	{
-		waitpid(pid_childs[i], &status, 0);
-	}
+	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
 void qualifications(int gp, int len_cars, int step, int lenght)
 {
-	int i;
+	int i; int status;
 	pid_t pid_childs[len_cars];
 	for (i = 0; i < len_cars; i++)
 	{
@@ -35,16 +31,13 @@ void qualifications(int gp, int len_cars, int step, int lenght)
 		}
 		else if (pid > 0) pid_childs[i] = pid;
 	}
-	int status;
-	for (i = 0; i < len_cars; i++)
-	{
-		waitpid(pid_childs[i], &status, 0);
-	}
+	
+	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
 void sprint(int gp, int len_cars, int lenght)
 {
-	int i;
+	int i; int status;
 	pid_t pid_childs[len_cars];
 	for (i = 0; i < len_cars; i++)
 	{
@@ -56,16 +49,12 @@ void sprint(int gp, int len_cars, int lenght)
 		}
 		else if (pid > 0) pid_childs[i] = pid;
 	}
-	int status;
-	for (i = 0; i < len_cars; i++)
-	{
-		waitpid(pid_childs[i], &status, 0);
-	}
+	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
 void race(int gp, int len_cars, int lenght)
 {
-	int i;
+	int i; int status;
 	pid_t pid_childs[len_cars];
 	for (i = 0; i < len_cars; i++)
 	{
@@ -77,11 +66,7 @@ void race(int gp, int len_cars, int lenght)
 		}
 		else if (pid > 0) pid_childs[i] = pid;
 	}
-	int status;
-	for (i = 0; i < len_cars; i++)
-	{
-		waitpid(pid_childs[i], &status, 0);
-	}
+	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
 ////ORGANISATION/////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -114,7 +99,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	scanf("%c",&input);
 	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	if (type == 0) {
+	if (type == 1) {
 		// P2
 		gps[gp].GP_state = 1;
 		practice(gp, len_cars);
@@ -130,27 +115,19 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 		if (input == 'y') save_data(gps,cars,data,gp,1);
 	}
 
-
 	// Q1
-	wipe_data_segment(data+(11*(len_cars+1)));
-	wipe_data_segment(data+(12*(len_cars+1)));
-	wipe_data_segment(data+(13*(len_cars+1)));
 	gps[gp].GP_state = 2;
 	qualifications(gp, len_cars, 0, 1080);
 	gps[gp].GP_state = -2;
 	scanf("%c",&input);
-	if (input == 'y') save_data(gps,cars,data,gp,1);
+	if (input == 'y') save_data(gps,cars,data,gp,2);
 
-	// // Q2
-	// wipe_data_segment(data+(11*(len_cars+1)));
-	// wipe_data_segment(data+(12*(len_cars+1)));
-	// wipe_data_segment(data+(13*(len_cars+1)));
-	// wipe_data_segment(data+(5*(len_cars+1)));
-	// gps[gp].GP_state = 3;
-	// qualifications(gp, len_cars, 1, 900);
-	// gps[gp].GP_state = -3;
-	// scanf("%c",&input);
-	// if (input == 'y') save_data(gps,cars,data,gp,1);
+	// Q2
+	gps[gp].GP_state = 3;
+	qualifications(gp, len_cars, 1, 900);
+	gps[gp].GP_state = -3;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,3);
 
 	// // Q3
 	// wipe_data_segment(data+(11*(len_cars+1)));
@@ -163,7 +140,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	// scanf("%c",&input);
 	// if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	// if (type == 1)
+	// if (type == 2)
 	// {
 	// 	// P2
 	// 	wipe_data_segment(data+(11*(len_cars+1)));

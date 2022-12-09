@@ -1,47 +1,3 @@
-/* return lenght of given NULL terminated array */
-int array_len_1(char *list)
-{
-	int len;
-	for (len = 0; list[len] != '\0'; len++)
-	{
-	}
-	return len;
-}
-
-void qualify()
-{
-}
-
-struct GrandPrix *init_GPs(struct GrandPrix* cars, char *data, int car_lenght)
-{
-	char **lines = split(data, "\r");
-	char **words;
-	int i;
-	for (i = 0; lines[i] != NULL; i++)
-	{
-		words = split(lines[i], ",");
-		cars[i] = GP_init(i, words[0], atoi(words[1]), atoi(words[2]), car_lenght, false);
-	}
-	cars[i] = GP_init(i, "NULL", 50, 1, 0, true);
-	free(lines);
-	free(words);
-}
-
-struct Car *init_CARs(struct Car* cars, char *data)
-{
-	char **lines = split(data, "\n");
-	char **words;
-	int i;
-	for (i = 0; lines[i] != NULL; i++)
-	{
-		words = split(lines[i], ",");
-		cars[i] = CAR_init(atoi(words[0]), words[1], words[2], false);
-	}
-	cars[i] = CAR_init(0, "NULL", "NULL", true);
-	free(lines);
-	free(words);
-}
-
 ////SIMULATION/////////////////////////////////////////////////////////////////////////
 
 void practice(int gp, int len_cars)
@@ -53,7 +9,7 @@ void practice(int gp, int len_cars)
 		pid_t pid = fork();
 		if (pid == 0)
 		{
-			car_sim_practice(i, 3600000, gp);
+			car_sim_practice(i, 3600, gp);
 			exit(0);
 		}
 		else if (pid > 0)
@@ -160,11 +116,14 @@ void race(int gp, int len_cars, int lenght)
 	}
 }
 
-void weekend1(int gp, int len_cars, int len_gps, float *data, struct Car *cars)
-{
-	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), 0666);
-	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
+////ORGANISATION/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void qualify()
+{
+}
+
+void weekend1(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car *cars)
+{
 	int i;
 	pid_t pid = fork();
 	if (pid == 0)
@@ -174,36 +133,76 @@ void weekend1(int gp, int len_cars, int len_gps, float *data, struct Car *cars)
 	}
 
 	// clear shared memory
-	int len_data = (len_cars + 1) * 14;
-	for (i = 0; i < len_data; i++)
-	{
-		if (((i + 1) % (len_cars + 1) == 0) && (i > 0))
-		{
-			data[i] = end;
-		}
-		else
-		{
-			data[i] = 0;
-		}
-	}
+	wipe_data(data,len_cars);
 
+	char input;
+
+	// P1
+	gps[gp].GP_state = 1;
 	practice(gp, len_cars);
-	//gps[gp].GP_state = 1;
+	gps[gp].GP_state = -1;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	// qualifications(gp, len_cars, 0, 1080000);
+	// // P2
+	// gps[gp].GP_state = 1;
+	// practice(gp, len_cars);
+	// gps[gp].GP_state = -1;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
+
+	// // P3
+	// gps[gp].GP_state = 1;
+	// practice(gp, len_cars);
+	// gps[gp].GP_state = -1;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
+
+	// // Q1
+	// wipe_data_segment(data+(11*(len_car+1)));
+	// wipe_data_segment(data+(12*(len_car+1)));
+	// wipe_data_segment(data+(13*(len_car+1)));
 	// gps[gp].GP_state = 2;
+	// qualifications(gp, len_cars, 0, 1080);
+	// gps[gp].GP_state = -2;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	// qualifications(gp, len_cars, 1, 900000);
+	// // Q2
+	// wipe_data_segment(data+(11*(len_car+1)));
+	// wipe_data_segment(data+(12*(len_car+1)));
+	// wipe_data_segment(data+(13*(len_car+1)));
 	// gps[gp].GP_state = 3;
+	// qualifications(gp, len_cars, 1, 900);
+	// gps[gp].GP_state = -3;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	// qualifications(gp, len_cars, 2, 720000);
-	// gps[gp].GP_state = 5;
+	// // Q3
+	// wipe_data_segment(data+(11*(len_car+1)));
+	// wipe_data_segment(data+(12*(len_car+1)));
+	// wipe_data_segment(data+(13*(len_car+1)));
+	// gps[gp].GP_state = 4;
+	// qualifications(gp, len_cars, 2, 720);
+	// gps[gp].GP_state = -4;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
 
+	// // RACE
+	// wipe_data_segment(data+(11*(len_car+1)));
+	// wipe_data_segment(data+(12*(len_car+1)));
+	// wipe_data_segment(data+(13*(len_car+1)));
+	// gps[gp].GP_state = 6;
 	// race(gp, len_cars, gps[gp].race_laps_number);
+	// gps[gp].GP_state = -6;
+	// scanf("%c",&input);
+	// if (input == 'y') save_data(gps,cars,data,gp,1);
 
 	// end gp
 	gps[gp].GP_state = 100;
 	shmdt(gps);
+	int status;
+	waitpid(pid,&status,0);
 }
 
 void weekend2(int gp, int len_cars, int len_gps, float *data, struct Car *cars)
@@ -231,24 +230,78 @@ void weekend2(int gp, int len_cars, int len_gps, float *data, struct Car *cars)
 			data[i] = 0;
 		}
 	}
-	practice(gp, len_cars);
+	char input;
+
+	// P1
 	gps[gp].GP_state = 1;
+	practice(gp, len_cars);
+	gps[gp].GP_state = -1;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	qualifications(gp, len_cars, 0, 1080000);
+	// Q1
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
 	gps[gp].GP_state = 2;
+	qualifications(gp, len_cars, 0, 1080);
+	gps[gp].GP_state = -2;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	qualifications(gp, len_cars, 1, 900000);
+	// Q2
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
 	gps[gp].GP_state = 3;
+	qualifications(gp, len_cars, 1, 900);
+	gps[gp].GP_state = -3;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	qualifications(gp, len_cars, 2, 720000);
+	// Q3
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
 	gps[gp].GP_state = 4;
+	qualifications(gp, len_cars, 2, 720);
+	gps[gp].GP_state = -4;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
-	sprint(gp, len_cars, gps[gp].sprint_laps_number);
+	// P2
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
+	gps[gp].GP_state = 1;
+	practice(gp, len_cars);
+	gps[gp].GP_state = -1;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
+
+	// SPRINT
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
 	gps[gp].GP_state = 5;
+	sprint(gp, len_cars, gps[gp].sprint_laps_number);
+	gps[gp].GP_state = -5;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
+	// RACE
+	wipe_data_segment(data+(11*(len_car+1)));
+	wipe_data_segment(data+(12*(len_car+1)));
+	wipe_data_segment(data+(13*(len_car+1)));
+	gps[gp].GP_state = 6;
 	race(gp, len_cars, gps[gp].race_laps_number);
+	gps[gp].GP_state = -6;
+	scanf("%c",&input);
+	if (input == 'y') save_data(gps,cars,data,gp,1);
 
 	// end gp
 	gps[gp].GP_state = 100;
 	shmdt(gps);
+	int status;
+	waitpid(pid,&status,0);
 }

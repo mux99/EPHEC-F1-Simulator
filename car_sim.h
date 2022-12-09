@@ -1,6 +1,6 @@
 float get_time()
 {
-	return ((float)rand()/(float)(RAND_MAX/21.0))+25.0;
+	return 25.0 + rand() / (float) RAND_MAX * (45.0 - 25.0);
 }
 
 void car_sim_practice(int i, int length, int gp)
@@ -13,7 +13,7 @@ void car_sim_practice(int i, int length, int gp)
 	int total_time = 0;
 	while (total_time < length)
 	{
-		int lap_time = 0;
+		float lap_time = 0;
 		int j;
 		for (j = 0; j < 3; j++)
 		{
@@ -22,7 +22,7 @@ void car_sim_practice(int i, int length, int gp)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
@@ -50,10 +50,10 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 		return;
 	}
 
-	int total_time = 0;
+	float total_time = 0;
 	while (total_time < length)
 	{
-		int lap_time = 0;
+		float lap_time = 0;
 		int j;
 		for (j = 0; j < 3; j++)
 		{
@@ -62,7 +62,7 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
@@ -88,12 +88,12 @@ void car_sim_sprint(int i, int gp, int length)
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
-	int total_time = 0;
+	float total_time = 0;
 	int lap_count;
 	for (lap_count=0;lap_count < length;lap_count++)
 	{
 		int j;
-		int lap_time = 0;
+		float lap_time = 0;
 		for (j=0; j < 3; j++)
 		{
 			float tmp = get_time();
@@ -101,7 +101,7 @@ void car_sim_sprint(int i, int gp, int length)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
@@ -119,12 +119,12 @@ void car_sim_race(int i, int gp, int length)
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
-	int total_time = 0;
+	float total_time = 0;
 	int lap_count;
 	for (lap_count=0;lap_count < length;lap_count++)
 	{
 		int j;
-		int lap_time = 0;
+		float lap_time = 0;
 		for (j=0; j < 3; j++)
 		{
 			float tmp = get_time();
@@ -132,7 +132,7 @@ void car_sim_race(int i, int gp, int length)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[i] == 0) {
+			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}

@@ -12,7 +12,8 @@ int* sort(float* data)
     {
         data_cp[i] = data[i];
     }
-    //finding the lowests
+
+    //finding the lowests for every spot on the leaderboard
     int* out = calloc(len+1,sizeof(int));
     out[len] = end;
     for (i=0;i<len;i++)
@@ -33,19 +34,27 @@ int* sort(float* data)
     return out;
 }
 
-void get_scoreboard_practice(int len_cars, struct Car* cars, float* data, struct GrandPrix gp)
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////s
+
+void scoreboard_practice(int len_cars, struct Car* cars, float* data, struct GrandPrix gp,int now,int start)
 {
     int* order = sort(data);
+    int* order_s1 = sort(data+(11*(len_cars+1)));
+    int* order_s2 = sort(data+(12*(len_cars+1)));
+    int* order_s3 = sort(data+(13*(len_cars+1)));
     int i;
-    printf("╔═══════════════════════════════════════════════════════════════════════════════════════╗\n");
-    printf("║PRACTICE %40s Grand Prix║\n",gp.location);
-    printf("╠══╦════════════════╦═══╦═════════════╦════════╦════════╦════╦════════╦════════╦════════╣\n");
-    printf("║%2s│%16s│%3s│%13s│%8s│%8s│%4s│%8s│%8s│%8s║\n","/","driver","num","team","best lap","diff","laps","best s1","best s2","best s3");
-    printf("╠══╬════════════════╬═══╬═════════════╬════════╬════════╬════╬════════╬════════╬════════╣\n");
+    printf("╔═══════════════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║PRACTICE %02d:%02d %62s Grand Prix   ║\n",
+                (now-start)/60,
+                now-start-((int)((now-start)/60)*60),
+                gp.location);
+    printf("╠══╦════════════════╦═══╦═════════════╦════════╦════════╦════╦════════╦════════╦════════╦═╦═╣\n");
+    printf("║%2s│%16s│%3s│%13s│%8s│%8s│%4s│%8s│%8s│%8s│%s│%s║\n","/","driver","num","team","best lap","diff","laps","best S1","best S2","best S3","P","O");
+    printf("╠══╬════════════════╬═══╬═════════════╬════════╬════════╬════╬════════╬════════╬════════╬═╬═╣\n");
     for (i=0;i<len_cars;i++)
     {
 
-        printf("║%2d│%16s│%3d│%13s│%8.3f│%8.3f│%4d│%8.3f│%8.3f│%8.3f║\n",
+        printf("║%2d│%16s│%3d│%13s│%8.3f│%8.3f│%4d│%8.3f│%8.3f│%8.3f│%s│%s║\n",
             i+1,
             cars[order[i]].driver,
             cars[order[i]].number,
@@ -55,26 +64,43 @@ void get_scoreboard_practice(int len_cars, struct Car* cars, float* data, struct
             (int)data[len_cars+1+order[i]],
             data[11*(len_cars+1)+order[i]],
             data[12*(len_cars+1)+order[i]],
-            data[13*(len_cars+1)+order[i]]);
+            data[13*(len_cars+1)+order[i]],
+            cars[order[i]].is_pit == true ? "P" : " ",
+            cars[order[i]].is_out == true ? "O" : " ");
     }
-    printf("╚══╩════════════════╩═══╩═════════════╩════════╩════════╩════╩════════╩════════╩════════╝\n");
+    printf("╚══╩════════════════╩═══╩═════════════╩════════╩════════╩════╬════════╬════════╬════════╬═╩═╝\n");
+    printf("                                                      num/pos║%-4d%4d│%-4d%4d│%-4d%4d║\n",
+        cars[order_s1[0]].number,order_s1[0],
+        cars[order_s2[0]].number,order_s2[0],
+        cars[order_s3[0]].number,order_s3[0]);
+    printf("                                          best sector overall║%8.3f│%8.3f│%8.3f║\n",
+        data[11*(len_cars+1)+order_s1[0]],
+        data[12*(len_cars+1)+order_s2[0]],
+        data[13*(len_cars+1)+order_s3[0]]);
+    printf("                                                             ╚════════╩════════╩════════╝\n");
+
     free(order);
+    free(order_s1);
+    free(order_s2);
+    free(order_s3);
 }
 
-void get_scoreboard_qualifs(int len_cars)
+void scoreboard_qualifs(int len_cars)
 {
     printf("test123\n");
 }
 
-void get_scoreboard_sprint(int len_cars)
+void scoreboard_sprint(int len_cars)
 {
     printf("test4\n");
 }
 
-void get_scoreboard_race(int len_cars)
+void scoreboard_race(int len_cars)
 {
     printf("test5\n");
 }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void display(int gp)
 {
@@ -89,41 +115,74 @@ void display(int gp)
 
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, NULL, 0);
-    
+
+    int start = time(NULL);
+    int now;
     while (0 == 0)
     {
-        if (gps[gp].GP_state == 0)
+        // practice
+        switch (gps[gp].GP_state)
         {
-            system("clear");
-            get_scoreboard_practice(len_cars,cars,data,gps[gp]);
-        }
-        else if (gps[gp].GP_state == 1)
-        {
-            system("clear");
-            get_scoreboard_qualifs(len_cars);
-        }
-        else if (gps[gp].GP_state == 2)
-        {
-            system("clear");
-            get_scoreboard_qualifs(len_cars);
-        }
-        else if (gps[gp].GP_state == 3)
-        {
-            system("clear");
-            get_scoreboard_qualifs(len_cars);
-        }
-        else if (gps[gp].GP_state == 4)
-        {
-            system("clear");
-            get_scoreboard_sprint(len_cars);
-        }
-        else if (gps[gp].GP_state == 5)
-        {
-            system("clear");
-            get_scoreboard_race(len_cars);
-        }
-        else if (gps[gp].GP_state == 100){
-            exit(0);
+            case 0: // idle state
+                start = time(NULL);
+                break;
+
+            case 1: // practice
+                system("clear");
+                now = time(NULL);
+                scoreboard_practice(len_cars,cars,data,gps[gp],now,start);
+                break;
+
+            case -1:
+                system("clear");
+                now = time(NULL);
+                scoreboard_practice(len_cars,cars,data,gps[gp],now,start);
+                printf("Practices are over\nsave scores to file? [Y/N]:\n");
+                gps[gp].GP_state = 0;
+                break;
+            
+            case 2: // qualifs round 1
+                system("clear");
+                scoreboard_qualifs(len_cars);
+                break;
+
+            case -2:
+                break;
+            
+            case 3: // qualifs round 2
+                system("clear");
+                scoreboard_qualifs(len_cars);
+                break;
+
+            case -3:
+                break;
+            
+            case 4: // qualifs round 3
+                system("clear");
+                scoreboard_qualifs(len_cars);
+                break;
+
+            case -4:
+                break;
+
+            case 5: // sprint
+                system("clear");
+                scoreboard_sprint(len_cars);
+                break;
+
+            case -5:
+                break;
+
+            case 6: // race
+                system("clear");
+                scoreboard_race(len_cars);
+                break;
+
+            case -6:
+                break;
+
+            default:
+                exit(0);
         }
         sleep(1);
     }

@@ -49,33 +49,6 @@ int countlines(char *filename)
   return lines;
 }
 
-/* return lenght of given NULL terminated array */
-int array_len_2(char** list){
-	int len;
-	for(len = 0; list[len] != NULL; len++){}
-	return len;
-}
-
-/* Print char[][] NULL terminated */
-void print_array(char** a){
-	int i;
-	printf("\n");
-	for(i=0; a[i] != NULL; i++){
-		printf("%s\n",a[i]);
-	}
-	printf("NULL\n");
-}
-
-void print_array_int(int* a){
-	int i;
-	printf("\n");
-	for(i=0; a[i] != end; i++){
-		printf("%d,",a[i]);
-	}
-	printf("NULL\n");
-}
-
-
 /* Read File to string */
 char* read_file(char* path){
 	int file = open(path, O_RDONLY);
@@ -100,6 +73,17 @@ char* read_file(char* path){
 	return out;
 }
 
+void write_file(char* path, char* content)
+{
+	int fd = open(path, O_WRONLY | O_CREAT, 0644);
+	if (fd != -1)
+	{
+		write(fd, content, strlen(content));
+		close(fd);
+	}
+}
+
+//does not work well, troubles with triple pointer array 
 /* read given csv file*/
 /* lines begining by # are comments */
 /* into NULL terminated arrays */
@@ -134,9 +118,3 @@ char*** read_CSV(char* path) {
 	free(lines);
 	return data;
 }*/
-
-/* read option file */
-/* lines begining by # are comments */
-void read_options(char* path) {
-	//---TBD---
-}

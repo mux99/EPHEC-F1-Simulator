@@ -12,13 +12,15 @@
 
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
-const float speed = 0.05;
+char *output_dir = "output/";
+const float speed = 0.0;
 const int end = -1;
 int shm_key = 33;
 
 #include "file_interactions.h"
 #include "struct_CAR.h"
 #include "struct_GP.h"
+#include "data_analysis.h"
 #include "display.h"
 #include "car_sim.h"
 #include "simulation_logic.h"
@@ -27,10 +29,12 @@ int shm_key = 33;
 //	EPHEC TI-02 OS
 // project:
 //	simulate a F1 racing championchip
+// author:
+//	Maxime Dourov (mux99)
 //
 
-// ALL TIMES IN ms
-// ALL DISTENCES IN m
+// ALL TIMES IN s (float)
+// ALL DISTENCES IN m (int)
 
 //MEMO on int *data:
 //
@@ -45,15 +49,13 @@ int shm_key = 33;
 //-8-
 //-9-
 //-10-
-//-11- S1 best
-//-12- S2 best
-//-13- S3 best
+//-11- S1 best (re-used for each step)
+//-12- S2 best (re-used for each step)
+//-13- S3 best (re-used for each step)
 
 /* ----MAIN----*/
 int main(int argc, char const *argv[])
 {
-	printf("---running---\n");
-
 	int len_cars = countlines(cars_file);
 	int len_gps = countlines(gps_file);
 	int len_data = (len_cars + 1) * 14;
@@ -72,14 +74,13 @@ int main(int argc, char const *argv[])
 	init_CARs(cars,read_file(cars_file));
 	init_GPs(gps,read_file(gps_file), len_cars);
 
-	printf("---init done---\n");
-	weekend1(0, len_cars, len_gps, data, cars);
+	weekend1(0, len_cars, gps, data, cars);
 	// for (i=0; gps[i].is_null == false; i++){
 	// 	if (gps[i].weekend_type == 1){
-	// 		weekend1(i,len_cars, len_gps,data, cars);
+	// 		weekend1(i,len_cars, gps,data, cars);
 	// 	}
 	// 	else if (gps[i].weekend_type == 2){
-	// 		weekend2(i,len_cars, len_gps,data, cars);
+	// 		weekend2(i,len_cars, gps,data, cars);
 	// 	}
 	// }
 
@@ -89,6 +90,5 @@ int main(int argc, char const *argv[])
 	shmctl(shmid_cars,IPC_RMID,0);
 	shmdt(data);
 	shmctl(shmid_data,IPC_RMID,0);
-	printf("---finished---\n");
 	return 0;
 }

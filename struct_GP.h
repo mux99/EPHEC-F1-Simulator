@@ -30,3 +30,18 @@ struct GrandPrix GP_init(int i, char* location, int track_lenght, int weekend_ty
 	out.GP_state = 0;
 	return out;
 };
+
+void init_GPs(struct GrandPrix* cars, char *data, int car_lenght)
+{
+	char **lines = split(data, "\r");
+	char **words;
+	int i;
+	for (i = 0; lines[i] != NULL; i++)
+	{
+		words = split(lines[i], ",");
+		cars[i] = GP_init(i, words[0], atoi(words[1]), atoi(words[2]), car_lenght, false);
+	}
+	cars[i] = GP_init(i, "NULL", 50, 1, 0, true);
+	free(lines);
+	free(words);
+}

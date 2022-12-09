@@ -10,6 +10,10 @@ void car_sim_practice(int i, int length, int gp)
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
+	if (cars[i].is_out == true){
+		return;
+	}
+
 	int total_time = 0;
 	while (total_time < length)
 	{
@@ -46,7 +50,7 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
 	struct Car *cars = shmat(shmid_cars, NULL, 0);
 
-	if (cars[i].is_out_qualifs == true){
+	if (cars[i].is_out_qualifs == true || cars[i].is_out == true){
 		return;
 	}
 
@@ -66,17 +70,18 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
-		if ((step == 0) && ((lap_time < data[len_cars+1+i]) || data[i] == 0))
-		{
-			data[len_cars+1+i] = lap_time;
-		}
-		else if ((step == 1) && ((lap_time < data[((len_cars+1)*2)+i]) || data[i] == 0))
+		data[5*(len_cars+1)+i]++;
+		if ((step == 0) && ((lap_time < data[(2*(len_cars+1))+i]) || data[i] == 0))
 		{
 			data[((len_cars+1)*2)+i] = lap_time;
 		}
-		else if ((step == 2) && ((lap_time < data[((len_cars+1)*3)+i]) || data[i] == 0))
+		else if ((step == 1) && ((lap_time < data[(3*(len_cars+1))+i]) || data[i] == 0))
 		{
 			data[((len_cars+1)*3)+i] = lap_time;
+		}
+		else if ((step == 2) && ((lap_time < data[(4*(len_cars+1))+i]) || data[i] == 0))
+		{
+			data[((len_cars+1)*4)+i] = lap_time;
 		}
 	}
 }
@@ -87,6 +92,10 @@ void car_sim_sprint(int i, int gp, int length)
 	int len_cars = countlines(cars_file);
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
+
+	if (cars[i].is_out == true){
+		return;
+	}
 
 	float total_time = 0;
 	int lap_count;
@@ -119,6 +128,10 @@ void car_sim_race(int i, int gp, int length)
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);
 	float *data = shmat(shmid_data, 0, 0);
 
+	if (cars[i].is_out == true){
+		return;
+	}
+	
 	float total_time = 0;
 	int lap_count;
 	for (lap_count=0;lap_count < length;lap_count++)

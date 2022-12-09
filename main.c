@@ -43,10 +43,10 @@ int shm_key = 33;
 //-2- qualifications round 1 best lap
 //-3- qualifications round 2 best lap
 //-4- qualifications round 3 best lap
-//-5- sprint best lap
-//-6- race best lap
-//-7- race time
-//-8-
+//-5- qualifications lap count
+//-6- sprint best lap
+//-7- race best lap
+//-8- race time
 //-9-
 //-10-
 //-11- S1 best (re-used for each step)
@@ -74,14 +74,9 @@ int main(int argc, char const *argv[])
 	init_CARs(cars,read_file(cars_file));
 	init_GPs(gps,read_file(gps_file), len_cars);
 
-	weekend1(0, len_cars, gps, data, cars);
+	run_gp(0, len_cars, gps, data, cars);
 	// for (i=0; gps[i].is_null == false; i++){
-	// 	if (gps[i].weekend_type == 1){
-	// 		weekend1(i,len_cars, gps,data, cars);
-	// 	}
-	// 	else if (gps[i].weekend_type == 2){
-	// 		weekend2(i,len_cars, gps,data, cars);
-	// 	}
+	// 	run_gp(i,len_cars, gps,data, cars);
 	// }
 
 	shmdt(gps);

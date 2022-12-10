@@ -34,7 +34,7 @@ void car_sim_practice(int i, int length, int gp)
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
-		data[len_cars+1+i]++;
+		data[10*(len_cars+1)+i]++;
 		if (lap_time < data[i] || data[i] == 0)
 		{
 			data[i] = lap_time;
@@ -71,22 +71,22 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
-				data[((j+11)*(len_cars+1))+i] = tmp;
+			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
+				data[((j+s1)*(len_cars+1))+i] = tmp;
 			}
 		}
-		data[5*(len_cars+1)+i]++;
-		if ((step == 0) && ((lap_time < data[(2*(len_cars+1))+i]) || data[(2*(len_cars+1))+i] == 0))
+		data[lpc*(len_cars+1)+i]++;
+		if ((step == 0) && ((lap_time < data[(q1*(len_cars+1))+i]) || data[(q1*(len_cars+1))+i] == 0))
 		{
-			data[((len_cars+1)*2)+i] = lap_time;
+			data[(q1*(len_cars+1))+i] = lap_time;
 		}
-		else if ((step == 1) && ((lap_time < data[(3*(len_cars+1))+i]) || data[(3*(len_cars+1))+i] == 0))
+		else if ((step == 1) && ((lap_time < data[(q2*(len_cars+1))+i]) || data[(q2*(len_cars+1))+i] == 0))
 		{
-			data[((len_cars+1)*3)+i] = lap_time;
+			data[(q2*(len_cars+1))+i] = lap_time;
 		}
-		else if ((step == 2) && ((lap_time < data[(4*(len_cars+1))+i]) || data[(4*(len_cars+1))+i] == 0))
+		else if ((step == 2) && ((lap_time < data[(q3*(len_cars+1))+i]) || data[(q3*(len_cars+1))+i] == 0))
 		{
-			data[((len_cars+1)*4)+i] = lap_time;
+			data[(q3*(len_cars+1))+i] = lap_time;
 		}
 	}
 }
@@ -122,6 +122,7 @@ void car_sim_sprint(int i, int gp, int length)
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
+		data[10*(len_cars+1)+i]++;
 		if (lap_time < data[(4*(len_cars+1))+i] || data[i] == 0)
 		{
 			data[(4*(len_cars+1))+i] = lap_time;
@@ -160,11 +161,11 @@ void car_sim_race(int i, int gp, int length)
 				data[((j+11)*(len_cars+1))+i] = tmp;
 			}
 		}
+		data[10*(len_cars+1)+i]++;
 		if (lap_time < data[(5*(len_cars+1))+i] || data[i] == 0)
 		{
 			data[(7*(len_cars+1))+i] = lap_time;
 		}
-		data[(9*(len_cars+1))+i]++;
 		data[(8*(len_cars+1))+i] = total_time;
 	}
 }

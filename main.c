@@ -15,17 +15,33 @@ char *gps_file = "data/grand_prix.csv";
 char *output_dir = "output/";
 const float speed = 30; // 0 <= value < 45
 
-
-
-const int end = -1;
+const int end = -10;
 int shm_key = 33;
 
-#include "file_interactions.h"
+//MEMO on int *data:
+//
+int p1 = 0;//-0- practice best lap
+int q1 = 1;//-1- qualifications round 1 best lap
+int q2 = 2;//-2- qualifications round 2 best lap
+int q3 = 3;//-3- qualifications round 3 best lap
+int srt = 4;//-4- race start positions (! not position by car but car by position)
+int sti = 5;//-5- sprint time
+int slp = 6;//-6- sprint best lap
+int rti = 7;//-7- race time
+int rlp = 8;//-8- race best lap
+//-9- 
+int lpc = 10;//-10- lap count (for all)
+int s1 = 11;//-11- S1 best (re-used for each step)
+int s2 = 12;//-12- S2 best (re-used for each step)
+int s3 = 13;//-13- S3 best (re-used for each step)
+
+
+#include "split.h"
 #include "struct_CAR.h"
 #include "struct_GP.h"
-#include "data_analysis.h"
 #include "display.h"
 #include "car_sim.h"
+#include "file_interactions.h"
 #include "simulation_logic.h"
 
 //
@@ -38,23 +54,6 @@ int shm_key = 33;
 
 // ALL TIMES IN s (float)
 // ALL DISTENCES IN m (int)
-
-//MEMO on int *data:
-//
-//-0- practice best lap
-//-1- practice lap count (re used by qualifications)
-//-2- qualifications round 1 best lap
-//-3- qualifications round 2 best lap
-//-4- qualifications round 3 best lap
-//-5- qualifications lap count
-//-6- race start positions (! not position by car but car by position)
-//-7- race best lap
-//-8- race time
-//-9- race lap count (also used by sprint)
-//-10- sprint time
-//-11- S1 best (re-used for each step)
-//-12- S2 best (re-used for each step)
-//-13- S3 best (re-used for each step)
 
 /* ----MAIN----*/
 int main(int argc, char const *argv[])

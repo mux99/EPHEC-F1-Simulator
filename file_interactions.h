@@ -10,45 +10,6 @@ int in_string(char* str){
 	return n % 2 != 0;
 }
 
-
-/* Split string on delim character*/
-/* into NULL terminated array */
-char** split(char* s, char* delim){
-	char** out = malloc(sizeof(char*));
-	int len = 1;
-	//split
-	char* tmp = strtok(s,delim);
-	while(tmp != NULL){
-		out[len-1] = calloc(strlen(tmp)+1, sizeof(char));
-		out[len-1] = tmp;
-		len++;
-		out = realloc(out,sizeof(char* ) * len);
-		tmp = strtok(NULL,delim);
-	}
-	out[len-1] = NULL;
-	return out;
-}
-
-//DOWLOADED https://stackoverflow.com/questions/12733105/c-function-that-counts-lines-in-file
-int countlines(char *filename)
-{
-  // count the number of lines in the file called filename                                    
-  FILE *fp = fopen(filename,"r");
-  int ch=0;
-  int lines=0;
-
-  if (fp == NULL) {return 0;}
-
-  lines++;
-  while ((ch = fgetc(fp)) != EOF)
-    {
-      if (ch == '\n')
-    lines++;
-    }
-  fclose(fp);
-  return lines;
-}
-
 /* Read File to string */
 char* read_file(char* path){
 	int file = open(path, O_RDONLY);
@@ -73,14 +34,57 @@ char* read_file(char* path){
 	return out;
 }
 
-void write_file(char* path, char* content)
+void save_data(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int step, int len_cars)
 {
-	int fd = open(path, O_WRONLY | O_CREAT, 0644);
-	if (fd != -1)
-	{
-		write(fd, content, strlen(content));
-		close(fd);
+	char temp;
+	int p[2];
+	pid_t pid;
+	int status;
+	pipe(p);
+	fflush(stdout);
+	int file = 0;
+	if((pid=fork())==0){
+		dup2(p[1], 1);
+		switch (step)
+		{
+		case 1:
+			scoreboard_practice(len_cars,cars,data,gps[gp],0,0);
+			break;
+
+		case 2:
+			scoreboard_qualif_1(len_cars,cars,data,gps[gp],0,0);
+			break;
+
+		case 3:
+			scoreboard_qualif_2(len_cars,cars,data,gps[gp],0,0);
+			break;
+
+		case 4:
+			scoreboard_qualif_3(len_cars,cars,data,gps[gp],0,0);
+			break;
+
+		case 5:
+			scoreboard_sprint(len_cars,cars,data,gps[gp],0,0);
+			break;
+
+		case 6:
+			scoreboard_race(len_cars,cars,data,gps[gp],0,0);
+			break;
+		
+		default:
+			break;
+    	}
+		exit(0);
 	}
+	waitpid(pid,&status,0); //wait for all childs to end
+	close(p[1]);
+
+	file = open("output.txt", O_TRUNC | O_CREAT | O_WRONLY, 0666);
+	//file = open("output.txt", O_APPEND | O_CREAT | O_WRONLY, 0666);
+	while(read(p[0], &temp, 1) > 0){
+		write(file, &temp, 1);
+	}
+	close(file);
 }
 
 //does not work well, troubles with triple pointer array 

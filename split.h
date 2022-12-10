@@ -17,6 +17,7 @@ char** split(char* s, char* delim){
 }
 
 //DOWLOADED https://stackoverflow.com/questions/12733105/c-function-that-counts-lines-in-file
+// needs to be replace for a better option that takes comments into account
 int countlines(char *filename)
 {
   // count the number of lines in the file called filename                                    

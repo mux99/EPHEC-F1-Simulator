@@ -6,13 +6,15 @@ generate randomly the times for each cars.
 display the leaderborad in "real" time. (meaning sped up)
 providing ample options for customizing the event.
 
-## Presise requirements.
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
-
 ## Inner workings
+basically it's a mess. let me elaborate...
+
+*---tbd---*
+
+
+## To do:
+- [ ] implement semaphores
+- [ ] use multiple output files
+- [ ] ability to comment out lines in input files (with #)
+- [ ] implement pit stops
+- [ ] implement vountary out (+ out reset? not clear on the rules)

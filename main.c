@@ -13,7 +13,7 @@
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
 char *output_dir = "output/";
-const float speed = 30; // 0 <= value < 45
+const float speed = 0; // 0 <= value < 45
 
 const int end = -10;
 int shm_key = 33;

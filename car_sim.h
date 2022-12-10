@@ -41,6 +41,7 @@ void car_sim_practice(int i, int length, int gp)
 
 		}
 	}
+	shmdt(cars);
 	shmdt(data);
 }
 
@@ -89,6 +90,8 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 			data[(q3*(len_cars+1))+i] = lap_time;
 		}
 	}
+	shmdt(cars);
+	shmdt(data);
 }
 
 void car_sim_sprint(int i, int gp, int length)
@@ -118,16 +121,19 @@ void car_sim_sprint(int i, int gp, int length)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
-				data[((j+11)*(len_cars+1))+i] = tmp;
+			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
+				data[((j+s1)*(len_cars+1))+i] = tmp;
 			}
 		}
-		data[10*(len_cars+1)+i]++;
-		if (lap_time < data[(4*(len_cars+1))+i] || data[i] == 0)
+		data[lpc*(len_cars+1)+i]++;
+		data[(sti*(len_cars+1))+i] = total_time;
+		if (lap_time < data[(slp*(len_cars+1))+i] || data[(slp*(len_cars+1))+i] == 0)
 		{
-			data[(4*(len_cars+1))+i] = lap_time;
+			data[(slp*(len_cars+1))+i] = lap_time;
 		}
 	}
+	shmdt(cars);
+	shmdt(data);
 }
 
 void car_sim_race(int i, int gp, int length)
@@ -157,15 +163,17 @@ void car_sim_race(int i, int gp, int length)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
-			if (data[((j+11)*(len_cars+1))+i] > tmp || data[((j+11)*(len_cars+1))+i] == 0) {
-				data[((j+11)*(len_cars+1))+i] = tmp;
+			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
+				data[((j+s1)*(len_cars+1))+i] = tmp;
 			}
 		}
-		data[10*(len_cars+1)+i]++;
-		if (lap_time < data[(5*(len_cars+1))+i] || data[i] == 0)
+		data[lpc*(len_cars+1)+i]++;
+		data[rti*(len_cars+1)+i] = total_time;
+		if (lap_time < data[rlp*(len_cars+1)+i] || data[rlp*(len_cars+1)+i] == 0)
 		{
-			data[(7*(len_cars+1))+i] = lap_time;
+			data[(rlp*(len_cars+1))+i] = lap_time;
 		}
-		data[(8*(len_cars+1))+i] = total_time;
 	}
+	shmdt(cars);
+	shmdt(data);
 }

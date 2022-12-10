@@ -70,6 +70,10 @@ void save_data(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int
 		case 6:
 			scoreboard_race(len_cars,cars,data,gps[gp],0,0);
 			break;
+
+		case 7:
+			scoreboard_recap(len_cars,cars,data,gps[gp]);
+			break;
 		
 		default:
 			break;

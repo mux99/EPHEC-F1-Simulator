@@ -11,13 +11,21 @@
 #include <time.h>
 #include <semaphore.h>
 
+// Options
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
-char *output_dir = "output/";
-const float speed = 0; // 0 <= value < 45
+const float speed = 20; // 0 <= value < 45
 
+int pit_min =16; // default 16
+int pit_max = 70; // default 70
+int pit_time = 25; // default 25
+
+
+key_t shm_key; // will also use shm_key+1 and +2
+
+
+// Global variables
 const int end = -10;
-int shm_key = 33;
 sem_t sem_data;
 sem_t sem_cars;
 sem_t sem_gps;
@@ -66,14 +74,19 @@ int main(int argc, char const *argv[])
 	int len_gps = countlines(gps_file);
 	int len_data = (len_cars + 1) * 14;
 
-	// init cars shared memory
-	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | 0666);
-	struct Car *cars = shmat(shmid_cars, NULL, 0);
+	shm_key = ftok(".",getpid());
 
-	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), IPC_CREAT | 0666);
+	// init cars shared memory
+	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | IPC_EXCL | 0666);
+	if (shmid_cars < 0) printf("error getting shared memory segment: cars\n");
+	struct Car *cars = shmat(shmid_cars, NULL, 0);
+	
+	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct GrandPrix), IPC_CREAT | IPC_EXCL | 0666);
+	if (shmid_gps < 0) printf("error getting shared memory segment: gps\n");
 	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
-	int shmid_data = shmget(shm_key + 2, len_data * sizeof(float), IPC_CREAT | 0666);
+	int shmid_data = shmget(shm_key + 2, len_data * sizeof(float), IPC_CREAT | IPC_EXCL | 0666);
+	if (shmid_data < 0) printf("error getting shared memory segment: data\n");
 	float *data = shmat(shmid_data, NULL, 0);
 
 	sem_init(&sem_cars, 0, 1);
@@ -84,10 +97,11 @@ int main(int argc, char const *argv[])
 	init_CARs(cars,read_file(cars_file));
 	init_GPs(gps,read_file(gps_file), len_cars);
 
-	run_gp(0, len_cars, gps, data, cars);
-	// for (i=0; gps[i].is_null == false; i++){
-	// 	run_gp(i,len_cars, gps,data, cars);
-	// }
+	//run_gp(0, len_cars, gps, data, cars);
+	int i;
+	for (i=0; i < len_gps; i++){
+		run_gp(i,len_cars,gps,data,cars);
+	}
 
 	shmdt(gps);
 	shmctl(shmid_gps,IPC_RMID,0);

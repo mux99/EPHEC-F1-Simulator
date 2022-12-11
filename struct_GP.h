@@ -17,11 +17,10 @@ struct GrandPrix {
 	// 5 race
 	// any other [end display]
 
-}location, track_lenght, sprint_laps_number, race_laps_number, GP_state;
+};
 
-struct GrandPrix GP_init(int i, char* location, int track_lenght, int weekend_type, int car_lenght, bool is_null) {
+struct GrandPrix GP_init(int i, char* location, int track_lenght, int weekend_type, int car_lenght) {
 	struct GrandPrix out;
-	out.is_null = is_null;
 	out.location = location;
 	out.track_lenght = track_lenght;
 	out.weekend_type = weekend_type;
@@ -31,15 +30,16 @@ struct GrandPrix GP_init(int i, char* location, int track_lenght, int weekend_ty
 	return out;
 };
 
-void init_GPs(struct GrandPrix* cars, char *data, int car_lenght)
+void init_GPs(struct GrandPrix* gps, char *data, int car_lenght)
 {
 	char **lines = split(data, "\r");
 	char **words;
 	int i;
 	for (i = 0; lines[i] != NULL; i++)
 	{
+		if (lines[i][0] == '#') continue;
 		words = split(lines[i], ",");
-		cars[i] = GP_init(i, words[0], atoi(words[1]), atoi(words[2]), car_lenght, false);
+		gps[i] = GP_init(i, words[0], atoi(words[1]), atoi(words[2]), car_lenght);
 	}
 	free(lines);
 	free(words);

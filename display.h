@@ -229,7 +229,7 @@ void scoreboard_qualif_2(int len_cars, struct Car* cars, float* data, struct Gra
 
                     (int)data[lpc*(len_cars+1)+order[i]],
                     cars[(int)data[(srt*(len_cars+1))+i]].is_pit == true ? "P" : " ",
-                    cars[(int)data[(srt*(len_cars+1))+i]].is_out == true ? "O" : " ");
+                    cars[(int)data[(srt*(len_cars+1))+i]].is_out == true || cars[(int)data[(srt*(len_cars+1))+i]].is_out_q2 == true ? "O" : " ");
         }
     }
     printf("╚══╩════════════════╩═══╩═════════════╩══════════╩══════════╩══════════╩════╬════════╬════════╬════════╬═╩═╝\n");
@@ -294,7 +294,7 @@ void scoreboard_qualif_3(int len_cars, struct Car* cars, float* data, struct Gra
                 cars[order[i]].is_pit == true ? "P" : " ",
                 cars[order[i]].is_out == true ? "O" : " ");
         } else if (cars[(int)data[(srt*(len_cars+1))+i]].is_out_q2 == true){
-            printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │   ----   │%3d ║  ----  │  ----  │  ----  │%s│%s║\n",
+            printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │   ----   │%3d ║  ----  │  ----  │  ----  │%s│O║\n",
                 i+1,
                 cars[(int)data[(srt*(len_cars+1))+i]].driver,
                 cars[(int)data[(srt*(len_cars+1))+i]].number,
@@ -305,8 +305,7 @@ void scoreboard_qualif_3(int len_cars, struct Car* cars, float* data, struct Gra
 
 
                 (int)data[lpc*(len_cars+1)+order[i]],
-                cars[(int)data[(srt*(len_cars+1))+i]].is_pit == true ? "P" : " ",
-                cars[(int)data[(srt*(len_cars+1))+i]].is_out == true ? "O" : " ");
+                cars[(int)data[(srt*(len_cars+1))+i]].is_pit == true ? "P" : " ");
         } else {
             printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│   ----   │   ----   │%3d ║  ----  │  ----  │  ----  │%s│%s║\n",
                 i+1,
@@ -323,7 +322,7 @@ void scoreboard_qualif_3(int len_cars, struct Car* cars, float* data, struct Gra
 
                 (int)data[lpc*(len_cars+1)+order[i]],
                 cars[(int)data[(srt*(len_cars+1))+i]].is_pit == true ? "P" : " ",
-                cars[(int)data[(srt*(len_cars+1))+i]].is_out == true ? "O" : " ");
+                cars[(int)data[(srt*(len_cars+1))+i]].is_out == true || cars[(int)data[(srt*(len_cars+1))+i]].is_out_q3 == true ? "O" : " ");
         }
     }
     printf("╚══╩════════════════╩═══╩═════════════╩══════════╩══════════╩══════════╩══════════╩════╬════════╬════════╬════════╬═╩═╝\n");
@@ -648,7 +647,7 @@ void display(int gp)
     int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), 0666);
 	struct Car *cars = shmat(shmid_cars, NULL, 0);
 
-	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct Car), 0666);
+	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct GrandPrix), 0666);
 	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
 	int shmid_data = shmget(shm_key + 2, (len_cars + 1) * 14 * sizeof(float), 0666);

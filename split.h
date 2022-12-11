@@ -16,23 +16,22 @@ char** split(char* s, char* delim){
 	return out;
 }
 
-//DOWLOADED https://stackoverflow.com/questions/12733105/c-function-that-counts-lines-in-file
-// needs to be replace for a better option that takes comments into account
 int countlines(char *filename)
 {
-  // count the number of lines in the file called filename                                    
-  FILE *fp = fopen(filename,"r");
-  int ch=0;
-  int lines=0;
+  FILE *file = fopen(filename, "r");
+  if (file == NULL) {
+    printf("Error: unable to open file %s\n", filename);
+    return 1;
+  }
 
-  if (fp == NULL) {return 0;}
-
-  lines++;
-  while ((ch = fgetc(fp)) != EOF)
-    {
-      if (ch == '\n')
-    lines++;
+  // Count the number of lines
+  int count = 0;
+  char line[1024];
+  while (fgets(line, sizeof(line), file)) {
+    if (line[0] != '#') {
+      // This line does not begin with #, so increment the count
+      count++;
     }
-  fclose(fp);
-  return lines;
+  }
+  return count;
 }

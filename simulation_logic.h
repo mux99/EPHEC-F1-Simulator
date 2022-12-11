@@ -173,98 +173,98 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	gps[gp].GP_state = -1;
 	ask_save(gps,cars,data,gp,1,len_cars);
 
-	if (type == 1) {
-		// P2
-		wipe_data_segment(data+s1*(len_cars+1));
-		wipe_data_segment(data+s2*(len_cars+1));
-		wipe_data_segment(data+s3*(len_cars+1));
-		wipe_data_segment(data+lpc*(len_cars+1));
-		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
-		gps[gp].GP_state = -1;
-		ask_save(gps,cars,data,gp,1,len_cars);
+	// if (type == 1) {
+	// 	// P2
+	// 	wipe_data_segment(data+s1*(len_cars+1));
+	// 	wipe_data_segment(data+s2*(len_cars+1));
+	// 	wipe_data_segment(data+s3*(len_cars+1));
+	// 	wipe_data_segment(data+lpc*(len_cars+1));
+	// 	gps[gp].GP_state = 1;
+	// 	practice(gp, len_cars);
+	// 	gps[gp].GP_state = -1;
+	// 	ask_save(gps,cars,data,gp,1,len_cars);
 
-		// P3
-		wipe_data_segment(data+s1*(len_cars+1));
-		wipe_data_segment(data+s2*(len_cars+1));
-		wipe_data_segment(data+s3*(len_cars+1));
-		wipe_data_segment(data+lpc*(len_cars+1));
-		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
-		gps[gp].GP_state = -1;
-		ask_save(gps,cars,data,gp,1,len_cars);
-	}
+	// 	// P3
+	// 	wipe_data_segment(data+s1*(len_cars+1));
+	// 	wipe_data_segment(data+s2*(len_cars+1));
+	// 	wipe_data_segment(data+s3*(len_cars+1));
+	// 	wipe_data_segment(data+lpc*(len_cars+1));
+	// 	gps[gp].GP_state = 1;
+	// 	practice(gp, len_cars);
+	// 	gps[gp].GP_state = -1;
+	// 	ask_save(gps,cars,data,gp,1,len_cars);
+	// }
 
-	// Q1
-	wipe_data_segment(data+s1*(len_cars+1));
-	wipe_data_segment(data+s2*(len_cars+1));
-	wipe_data_segment(data+s3*(len_cars+1));
-	wipe_data_segment(data+lpc*(len_cars+1));
-	gps[gp].GP_state = 2;
-	qualifications(gp, len_cars, 0, 1080);
-	gps[gp].GP_state = -2;
-	qualify(data,cars,len_cars,1);
-	ask_save(gps,cars,data,gp,2,len_cars);
+	// // Q1
+	// wipe_data_segment(data+s1*(len_cars+1));
+	// wipe_data_segment(data+s2*(len_cars+1));
+	// wipe_data_segment(data+s3*(len_cars+1));
+	// wipe_data_segment(data+lpc*(len_cars+1));
+	// gps[gp].GP_state = 2;
+	// qualifications(gp, len_cars, 0, 1080);
+	// gps[gp].GP_state = -2;
+	// qualify(data,cars,len_cars,1);
+	// ask_save(gps,cars,data,gp,2,len_cars);
 
-	// Q2
-	wipe_data_segment(data+s1*(len_cars+1));
-	wipe_data_segment(data+s2*(len_cars+1));
-	wipe_data_segment(data+s3*(len_cars+1));
-	wipe_data_segment(data+lpc*(len_cars+1));
-	gps[gp].GP_state = 3;
-	qualifications(gp, len_cars, 1, 900);
-	gps[gp].GP_state = -3;
-	qualify(data,cars,len_cars,2);
-	ask_save(gps,cars,data,gp,3,len_cars);
+	// // Q2
+	// wipe_data_segment(data+s1*(len_cars+1));
+	// wipe_data_segment(data+s2*(len_cars+1));
+	// wipe_data_segment(data+s3*(len_cars+1));
+	// wipe_data_segment(data+lpc*(len_cars+1));
+	// gps[gp].GP_state = 3;
+	// qualifications(gp, len_cars, 1, 900);
+	// gps[gp].GP_state = -3;
+	// qualify(data,cars,len_cars,2);
+	// ask_save(gps,cars,data,gp,3,len_cars);
 
-	// Q3
-	wipe_data_segment(data+s1*(len_cars+1));
-	wipe_data_segment(data+s2*(len_cars+1));
-	wipe_data_segment(data+s3*(len_cars+1));
-	wipe_data_segment(data+lpc*(len_cars+1));
-	gps[gp].GP_state = 4;
-	qualifications(gp, len_cars, 2, 720);
-	gps[gp].GP_state = -4;
-	qualify(data,cars,len_cars,3);
-	ask_save(gps,cars,data,gp,4,len_cars);
+	// // Q3
+	// wipe_data_segment(data+s1*(len_cars+1));
+	// wipe_data_segment(data+s2*(len_cars+1));
+	// wipe_data_segment(data+s3*(len_cars+1));
+	// wipe_data_segment(data+lpc*(len_cars+1));
+	// gps[gp].GP_state = 4;
+	// qualifications(gp, len_cars, 2, 720);
+	// gps[gp].GP_state = -4;
+	// qualify(data,cars,len_cars,3);
+	// ask_save(gps,cars,data,gp,4,len_cars);
 
-	if (type == 2)
-	{
-		// P2
-		wipe_data_segment(data+s1*(len_cars+1));
-		wipe_data_segment(data+s2*(len_cars+1));
-		wipe_data_segment(data+s3*(len_cars+1));
-		wipe_data_segment(data+lpc*(len_cars+1));
-		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
-		gps[gp].GP_state = -1;
-		ask_save(gps,cars,data,gp,1,len_cars);
+	// if (type == 2)
+	// {
+	// 	// P2
+	// 	wipe_data_segment(data+s1*(len_cars+1));
+	// 	wipe_data_segment(data+s2*(len_cars+1));
+	// 	wipe_data_segment(data+s3*(len_cars+1));
+	// 	wipe_data_segment(data+lpc*(len_cars+1));
+	// 	gps[gp].GP_state = 1;
+	// 	practice(gp, len_cars);
+	// 	gps[gp].GP_state = -1;
+	// 	ask_save(gps,cars,data,gp,1,len_cars);
 
-		// SPRINT
-		wipe_data_segment(data+s1*(len_cars+1));
-		wipe_data_segment(data+s2*(len_cars+1));
-		wipe_data_segment(data+s3*(len_cars+1));
-		wipe_data_segment(data+lpc*(len_cars+1));
-		gps[gp].GP_state = 5;
-		sprint(gp, len_cars, gps[gp].sprint_laps_number);
-		gps[gp].GP_state = -5;
-		qualify(data,cars,len_cars,4);
-		ask_save(gps,cars,data,gp,5,len_cars);
-	}
+	// 	// SPRINT
+	// 	wipe_data_segment(data+s1*(len_cars+1));
+	// 	wipe_data_segment(data+s2*(len_cars+1));
+	// 	wipe_data_segment(data+s3*(len_cars+1));
+	// 	wipe_data_segment(data+lpc*(len_cars+1));
+	// 	gps[gp].GP_state = 5;
+	// 	sprint(gp, len_cars, gps[gp].sprint_laps_number);
+	// 	gps[gp].GP_state = -5;
+	// 	qualify(data,cars,len_cars,4);
+	// 	ask_save(gps,cars,data,gp,5,len_cars);
+	// }
 
-	// RACE
-	wipe_data_segment(data+s1*(len_cars+1));
-	wipe_data_segment(data+s2*(len_cars+1));
-	wipe_data_segment(data+s3*(len_cars+1));
-	wipe_data_segment(data+lpc*(len_cars+1));
-	gps[gp].GP_state = 6;
-	race(gp, len_cars, gps[gp].race_laps_number);
-	gps[gp].GP_state = -6;
-	ask_save(gps,cars,data,gp,6,len_cars);
+	// // RACE
+	// wipe_data_segment(data+s1*(len_cars+1));
+	// wipe_data_segment(data+s2*(len_cars+1));
+	// wipe_data_segment(data+s3*(len_cars+1));
+	// wipe_data_segment(data+lpc*(len_cars+1));
+	// gps[gp].GP_state = 6;
+	// race(gp, len_cars, gps[gp].race_laps_number);
+	// gps[gp].GP_state = -6;
+	// ask_save(gps,cars,data,gp,6,len_cars);
 
-	//recap
-	gps[gp].GP_state = 7;
-	ask_save(gps,cars,data,gp,7,len_cars);
+	// //recap
+	// gps[gp].GP_state = 7;
+	// ask_save(gps,cars,data,gp,7,len_cars);
 
 	// end gp
 	gps[gp].GP_state = 100;

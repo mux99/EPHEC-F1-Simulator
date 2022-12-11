@@ -27,6 +27,7 @@ struct Car CAR_init(int number, char* driver, char* team, bool is_null, bool is_
 	out.is_pit = false;
 	out.is_out_q2 = false;
 	out.is_out_q3 = false;
+	out.points = 0;
 	return out;
 }
 

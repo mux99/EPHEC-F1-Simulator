@@ -9,6 +9,7 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <time.h>
+#include <semaphore.h>
 
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
@@ -17,6 +18,9 @@ const float speed = 0; // 0 <= value < 45
 
 const int end = -10;
 int shm_key = 33;
+sem_t sem_data;
+sem_t sem_cars;
+sem_t sem_gps;
 
 //MEMO on int *data:
 //
@@ -29,7 +33,7 @@ int sti = 5;//-5- sprint time
 int slp = 6;//-6- sprint best lap
 int rti = 7;//-7- race time
 int rlp = 8;//-8- race best lap
-//-9- 
+int pts = 9;//-9- points earned
 int lpc = 10;//-10- lap count (for all)
 int s1 = 11;//-11- S1 best (re-used for each step)
 int s2 = 12;//-12- S2 best (re-used for each step)
@@ -72,6 +76,10 @@ int main(int argc, char const *argv[])
 	int shmid_data = shmget(shm_key + 2, len_data * sizeof(float), IPC_CREAT | 0666);
 	float *data = shmat(shmid_data, NULL, 0);
 
+	sem_init(&sem_cars, 0, 1);
+	sem_init(&sem_data, 0, 1);
+	sem_init(&sem_gps, 0, 1);
+
 	// init structs lists
 	init_CARs(cars,read_file(cars_file));
 	init_GPs(gps,read_file(gps_file), len_cars);
@@ -87,5 +95,9 @@ int main(int argc, char const *argv[])
 	shmctl(shmid_cars,IPC_RMID,0);
 	shmdt(data);
 	shmctl(shmid_data,IPC_RMID,0);
+
+	sem_destroy(&sem_cars);
+	sem_destroy(&sem_data);
+	sem_destroy(&sem_gps);
 	return 0;
 }

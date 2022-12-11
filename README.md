@@ -14,7 +14,7 @@ basically it's a mess. let me elaborate...
 
 ## To do:
 - [ ] implement semaphores
-- [ ] use multiple output files
 - [ ] ability to comment out lines in input files (with #)
 - [ ] implement pit stops
 - [ ] implement vountary out (+ out reset? not clear on the rules)
+- [ ] give score to cars

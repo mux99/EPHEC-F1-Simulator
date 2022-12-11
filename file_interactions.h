@@ -36,6 +36,9 @@ char* read_file(char* path){
 
 void save_data(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int step, int len_cars)
 {
+	printf("enter the name of the file:");
+	char input[100];
+	scanf("%s",input);
 	char temp;
 	int p[2];
 	pid_t pid;
@@ -83,7 +86,7 @@ void save_data(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int
 	waitpid(pid,&status,0); //wait for all childs to end
 	close(p[1]);
 
-	file = open("output.txt", O_TRUNC | O_CREAT | O_WRONLY, 0666);
+	file = open(input, O_TRUNC | O_CREAT | O_WRONLY, 0666);
 	//file = open("output.txt", O_APPEND | O_CREAT | O_WRONLY, 0666);
 	while(read(p[0], &temp, 1) > 0){
 		write(file, &temp, 1);

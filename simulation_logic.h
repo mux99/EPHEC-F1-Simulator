@@ -26,7 +26,7 @@ void wipe_data_segment(float* data)
 
 ////SIMULATION/////////////////////////////////////////////////////////////////////////
 
-void practice(int gp, int len_cars)
+void practice(int gp, int len_cars, int lenght)
 {
 	int i; int status;
 	pid_t pid_childs[len_cars];
@@ -35,7 +35,7 @@ void practice(int gp, int len_cars)
 		pid_t pid = fork();
 		if (pid == 0)
 		{
-			car_sim_practice(i, 3600, gp);
+			car_sim_practice(i, lenght, gp);
 			exit(0);
 		}
 		else if (pid > 0) pid_childs[i] = pid;
@@ -196,7 +196,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 
 	// P1
 	gps[gp].GP_state = 1;
-	practice(gp, len_cars);
+	practice(gp, len_cars, practice_lenght);
 	gps[gp].GP_state = -1;
 	ask_save(gps,cars,data,gp,1,len_cars);
 
@@ -207,7 +207,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 		wipe_data_segment(data+s3*(len_cars+1));
 		wipe_data_segment(data+lpc*(len_cars+1));
 		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
+		practice(gp, len_cars, practice_lenght);
 		gps[gp].GP_state = -1;
 		ask_save(gps,cars,data,gp,1,len_cars);
 
@@ -217,7 +217,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 		wipe_data_segment(data+s3*(len_cars+1));
 		wipe_data_segment(data+lpc*(len_cars+1));
 		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
+		practice(gp, len_cars, practice_lenght);
 		gps[gp].GP_state = -1;
 		ask_save(gps,cars,data,gp,1,len_cars);
 	}
@@ -228,7 +228,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	wipe_data_segment(data+s3*(len_cars+1));
 	wipe_data_segment(data+lpc*(len_cars+1));
 	gps[gp].GP_state = 2;
-	qualifications(gp, len_cars, 0, 1080);
+	qualifications(gp, len_cars, 0, qualif_1_lenght);
 	gps[gp].GP_state = -2;
 	qualify(data,cars,len_cars,1);
 	ask_save(gps,cars,data,gp,2,len_cars);
@@ -239,7 +239,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	wipe_data_segment(data+s3*(len_cars+1));
 	wipe_data_segment(data+lpc*(len_cars+1));
 	gps[gp].GP_state = 3;
-	qualifications(gp, len_cars, 1, 900);
+	qualifications(gp, len_cars, 1, qualif_2_lenght);
 	gps[gp].GP_state = -3;
 	qualify(data,cars,len_cars,2);
 	ask_save(gps,cars,data,gp,3,len_cars);
@@ -250,7 +250,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	wipe_data_segment(data+s3*(len_cars+1));
 	wipe_data_segment(data+lpc*(len_cars+1));
 	gps[gp].GP_state = 4;
-	qualifications(gp, len_cars, 2, 720);
+	qualifications(gp, len_cars, 2, qualif_3_lenght);
 	gps[gp].GP_state = -4;
 	qualify(data,cars,len_cars,3);
 	ask_save(gps,cars,data,gp,4,len_cars);
@@ -263,7 +263,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 		wipe_data_segment(data+s3*(len_cars+1));
 		wipe_data_segment(data+lpc*(len_cars+1));
 		gps[gp].GP_state = 1;
-		practice(gp, len_cars);
+		practice(gp, len_cars, practice_lenght);
 		gps[gp].GP_state = -1;
 		ask_save(gps,cars,data,gp,1,len_cars);
 
@@ -296,7 +296,6 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 
 	// end gp
 	gps[gp].GP_state = 100;
-	shmdt(gps);
 	int status;
 	waitpid(pid,&status,0);
 }

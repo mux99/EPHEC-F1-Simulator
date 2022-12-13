@@ -14,21 +14,25 @@
 // Options
 char *cars_file = "data/cars.csv";
 char *gps_file = "data/grand_prix.csv";
-const float speed = 20; // 0 <= value < 45
+const float speed = 0; // 0 <= value < 45
 
 int pit_min =16; // default 16
 int pit_max = 70; // default 70
 int pit_time = 25; // default 25
 
+int practice_lenght = 3600; //in seconds
+int qualif_1_lenght = 1080; //in seconds
+int qualif_2_lenght = 900; //in seconds
+int qualif_3_lenght = 720; //in seconds
+int sprint_lenght = 10000; //in meters
+int race_lenght = 300000; //in meters
 
-key_t shm_key; // will also use shm_key+1 and +2
-
-
-// Global variables
+// Global variables (DO NOT CHANGE)
 const int end = -10;
 sem_t sem_data;
 sem_t sem_cars;
 sem_t sem_gps;
+key_t shm_key; // will also use shm_key+1 and +2
 
 //MEMO on int *data:
 //
@@ -78,15 +82,24 @@ int main(int argc, char const *argv[])
 
 	// init cars shared memory
 	int shmid_cars = shmget(shm_key, len_cars * sizeof(struct Car), IPC_CREAT | IPC_EXCL | 0666);
-	if (shmid_cars < 0) printf("error getting shared memory segment: cars\n");
+	if (shmid_cars < 0) {
+		printf("error getting shared memory segment: cars\n");
+		exit(-1);
+	}
 	struct Car *cars = shmat(shmid_cars, NULL, 0);
 	
 	int shmid_gps = shmget(shm_key + 1, len_gps * sizeof(struct GrandPrix), IPC_CREAT | IPC_EXCL | 0666);
-	if (shmid_gps < 0) printf("error getting shared memory segment: gps\n");
+	if (shmid_gps < 0) {
+		printf("error getting shared memory segment: gps\n");
+		exit(-1);
+	}
 	struct GrandPrix *gps = shmat(shmid_gps, NULL, 0);
 
 	int shmid_data = shmget(shm_key + 2, len_data * sizeof(float), IPC_CREAT | IPC_EXCL | 0666);
-	if (shmid_data < 0) printf("error getting shared memory segment: data\n");
+	if (shmid_data < 0) {
+		printf("error getting shared memory segment: data\n");
+		exit(-1);
+	}
 	float *data = shmat(shmid_data, NULL, 0);
 
 	sem_init(&sem_cars, 0, 1);

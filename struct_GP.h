@@ -24,15 +24,15 @@ struct GrandPrix GP_init(int i, char* location, int track_lenght, int weekend_ty
 	out.location = location;
 	out.track_lenght = track_lenght;
 	out.weekend_type = weekend_type;
-	out.sprint_laps_number = 100000 / track_lenght;
-	out.race_laps_number = 300000 / track_lenght;
+	out.sprint_laps_number = sprint_lenght / track_lenght;
+	out.race_laps_number = race_lenght / track_lenght;
 	out.GP_state = 0;
 	return out;
 };
 
 void init_GPs(struct GrandPrix* gps, char *data, int car_lenght)
 {
-	char **lines = split(data, "\r");
+	char **lines = split(data, "\n");
 	char **words;
 	int i;
 	for (i = 0; lines[i] != NULL; i++)

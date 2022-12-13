@@ -672,8 +672,7 @@ void display(int gp)
 
             case -1:
                 system("clear");
-                now = time(NULL);
-                scoreboard_practice(len_cars,cars,data,gps[gp],now,start);
+                scoreboard_practice(len_cars,cars,data,gps[gp],practice_lenght,0);
                 printf("Practices are over\nsave scores to file? [y/n]:\n");
                 gps[gp].GP_state = 0;
                 break;
@@ -687,7 +686,7 @@ void display(int gp)
             case -2:
                 system("clear");
                 now = time(NULL);
-                scoreboard_qualif_1(len_cars,cars,data,gps[gp],now,start);
+                scoreboard_qualif_1(len_cars,cars,data,gps[gp],qualif_1_lenght,0);
                 printf("Round 1 of Qualifications are over\nsave scores to file? [y/n]:\n");
                 gps[gp].GP_state = 0;
                 break;
@@ -701,7 +700,7 @@ void display(int gp)
             case -3:
                 system("clear");
                 now = time(NULL);
-                scoreboard_qualif_2(len_cars,cars,data,gps[gp],now,start);
+                scoreboard_qualif_2(len_cars,cars,data,gps[gp],qualif_2_lenght,0);
                 printf("Round 2 of Qualifications are over\nsave scores to file? [y/n]:\n");
                 gps[gp].GP_state = 0;
                 break;
@@ -715,7 +714,7 @@ void display(int gp)
             case -4:
                 system("clear");
                 now = time(NULL);
-                scoreboard_qualif_3(len_cars,cars,data,gps[gp],now,start);
+                scoreboard_qualif_3(len_cars,cars,data,gps[gp],qualif_3_lenght,0);
                 printf("Round 3 of Qualifications are over\nsave scores to file? [y/n]:\n");
                 gps[gp].GP_state = 0;
                 break;

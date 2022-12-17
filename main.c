@@ -12,20 +12,20 @@
 #include <semaphore.h>
 
 // Options
-char *cars_file = "data/cars.csv";
-char *gps_file = "data/grand_prix.csv";
-const float speed = 0; // 0 <= value < 45
+char cars_file[50] = {0};
+char gps_file[50] = {0};
+float speed; // 0 <= value < 45
 
-int pit_min =16; // default 16
-int pit_max = 70; // default 70
-int pit_time = 25; // default 25
+int pit_min; // default 16
+int pit_max; // default 70
+int pit_time; // default 25
 
-int practice_lenght = 3600; //in seconds
-int qualif_1_lenght = 1080; //in seconds
-int qualif_2_lenght = 900; //in seconds
-int qualif_3_lenght = 720; //in seconds
-int sprint_lenght = 10000; //in meters
-int race_lenght = 300000; //in meters
+int practice_lenght; //in seconds
+int qualif_1_lenght; //in seconds
+int qualif_2_lenght; //in seconds
+int qualif_3_lenght; //in seconds
+int sprint_lenght; //in meters
+int race_lenght; //in meters
 
 // Global variables (DO NOT CHANGE)
 const int end = -10;
@@ -59,6 +59,7 @@ int s3 = 13;//-13- S3 best (re-used for each step)
 #include "car_sim.h"
 #include "file_interactions.h"
 #include "simulation_logic.h"
+#include "option_parser.h"
 
 //
 //	EPHEC TI-02 OS
@@ -74,6 +75,8 @@ int s3 = 13;//-13- S3 best (re-used for each step)
 /* ----MAIN----*/
 int main(int argc, char const *argv[])
 {
+	parse_options("options.txt");
+	
 	int len_cars = countlines(cars_file);
 	int len_gps = countlines(gps_file);
 	int len_data = (len_cars + 1) * 14;

@@ -1,6 +1,6 @@
 cars_file=data/cars.csv
 gps_file=data/grand_prix.csv
-speed=20
+speed=1
 pit_min=16
 pit_max=70
 pit_time=25

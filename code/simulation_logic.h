@@ -142,17 +142,30 @@ void qualify(float* data, struct Car *cars, int len_cars, int step)
 	}
 }
 
-void give_points(float* data, struct Car *cars, int len_cars)
+void give_points(float* data, struct Car *cars, int len_cars, int step)
 {
-	int points[] = {25,18,15,12,10,8,6,4,2,1};
+	int points_6[] = {25,18,15,12,10,8,6,4,2,1};
+	int points_5[] = {8,7,6,5,4,3,2,1,1,1};
 	int point_max = 9;
+	int* points;
+	int* order;
+	int* order2;
 	int i;
-	int* order = sort(data+(rti*(len_cars+1)));
+	if (step == 5){
+		order = sort(data+(sti*(len_cars+1)));
+		order2 = sort(data+(slp*(len_cars+1)));
+		points = points_5;
+	} else {
+		order = sort(data+(rti*(len_cars+1)));
+		order2 = sort(data+(rlp*(len_cars+1)));
+		points = points_6;
+	}
+	
 	for (i=0; i< len_cars; i++) 
 	{
 		sem_wait(&sem_cars);
 		sem_wait(&sem_data);
-		if (data[rti*(len_cars+1)+order[i]] > 0)
+		if ((data[rti*(len_cars+1)+order[i]] > 0 && step == 6) || (data[sti*(len_cars+1)+order[i]] > 0 && step == 5))
 		{
 			if (i <= point_max)
 			{
@@ -166,7 +179,14 @@ void give_points(float* data, struct Car *cars, int len_cars)
 		sem_post(&sem_cars);
 		sem_post(&sem_data);
 	}
+	sem_wait(&sem_cars);
+	sem_wait(&sem_data);
+	data[pts*(len_cars+1)+order2[0]] += 1;
+	cars[order2[0]].points += 1;
+	sem_post(&sem_cars);
+	sem_post(&sem_data);
 	free(order);
+	free(order2);
 }
 
 void ask_save(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int step, int len_cars)
@@ -276,6 +296,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 		sprint(gp, len_cars, gps[gp].sprint_laps_number);
 		gps[gp].GP_state = -5;
 		qualify(data,cars,len_cars,4);
+		give_points(data,cars,len_cars,5);
 		ask_save(gps,cars,data,gp,5,len_cars);
 	}
 
@@ -290,7 +311,7 @@ void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car
 	ask_save(gps,cars,data,gp,6,len_cars);
 
 	//recap
-	give_points(data,cars,len_cars);
+	give_points(data,cars,len_cars,6);
 	gps[gp].GP_state = -7;
 	ask_save(gps,cars,data,gp,7,len_cars);
 

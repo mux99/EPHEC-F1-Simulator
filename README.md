@@ -28,5 +28,5 @@ basically it's a mess. let me elaborate...
 - [x] have options to personalize the simulation
 - [x] data can be saved to file at the end of each activity
 - [x] for the race each car must PIT at least onece
-- [ ] for the sprint the first 8 cars receive points 8 -> 1
-- [ ] for the race the best lap receive 1 point (if one of the 10 first)
+- [x] for the sprint the first 8 cars receive points 8 -> 1
+- [x] for the race the best lap receive 1 point (if one of the 10 first)

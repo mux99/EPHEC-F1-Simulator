@@ -211,6 +211,7 @@ void car_sim_race(int i, int gp, int length)
 	float *data = shmat(shmid_data, 0, 0);
 
 	int pits = get_pit();
+	bool as_pit = false;
 	unsigned int time_to_sleep;
 
 	sem_wait(&sem_cars);
@@ -225,10 +226,14 @@ void car_sim_race(int i, int gp, int length)
 	{
 		int j;
 		float lap_time = 0;
+		if (lap_count == length/2 && as_pit == false){
+			pits = 0;
+		}
 		for (j=0; j < 3; j++)
 		{
 			if (j == 2 && pits <= 0)
 			{
+				as_pit = true;
 				sem_wait(&sem_cars);
 				cars[i].is_pit = true;
 				sem_post(&sem_cars);
@@ -237,7 +242,6 @@ void car_sim_race(int i, int gp, int length)
 				sem_wait(&sem_cars);
 				cars[i].is_pit = false;
 				sem_post(&sem_cars);
-				pits = get_pit();
 				pits = get_pit();
 			}
 			float tmp = get_time();

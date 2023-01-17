@@ -1,3 +1,6 @@
+/*
+* return all values in data to zeros and replace the 'end' separator
+*/
 void wipe_data(float* data, int len_cars)
 {
     int i;
@@ -15,6 +18,9 @@ void wipe_data(float* data, int len_cars)
 	}
 }
 
+/*
+* return all values in given data segment to zeros
+*/
 void wipe_data_segment(float* data)
 {
     int i;
@@ -25,7 +31,9 @@ void wipe_data_segment(float* data)
 }
 
 ////SIMULATION/////////////////////////////////////////////////////////////////////////
-
+/*
+* run all cars practices in parallel processes
+*/
 void practice(int gp, int len_cars, int lenght)
 {
 	int i; int status;
@@ -43,6 +51,9 @@ void practice(int gp, int len_cars, int lenght)
 	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
+/*
+* run all cars qualifs in parallel processes
+*/
 void qualifications(int gp, int len_cars, int step, int lenght)
 {
 	int i; int status;
@@ -61,6 +72,9 @@ void qualifications(int gp, int len_cars, int step, int lenght)
 	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
+/*
+* run all cars sprint in parallel processes
+*/
 void sprint(int gp, int len_cars, int lenght)
 {
 	int i; int status;
@@ -78,6 +92,9 @@ void sprint(int gp, int len_cars, int lenght)
 	for (i = 0; i < len_cars; i++) waitpid(pid_childs[i], &status, 0);
 }
 
+/*
+* run all cars race in parallel processes
+*/
 void race(int gp, int len_cars, int lenght)
 {
 	int i; int status;
@@ -97,6 +114,9 @@ void race(int gp, int len_cars, int lenght)
 
 ////ORGANISATION/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*
+* give a starting pos to cars depending on qualif round and times
+*/
 void qualify(float* data, struct Car *cars, int len_cars, int step)
 {
 	int i;
@@ -142,6 +162,9 @@ void qualify(float* data, struct Car *cars, int len_cars, int step)
 	}
 }
 
+/*
+* give points to cars after a race or sprint
+*/
 void give_points(float* data, struct Car *cars, int len_cars, int step)
 {
 	int points_6[] = {25,18,15,12,10,8,6,4,2,1};
@@ -189,6 +212,9 @@ void give_points(float* data, struct Car *cars, int len_cars, int step)
 	free(order2);
 }
 
+/*
+* ask the user if he wants to save curent leaderboard + saves it if yes
+*/
 void ask_save(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int step, int len_cars)
 {
 	char input; int c;
@@ -199,6 +225,9 @@ void ask_save(struct GrandPrix* gps, struct Car* cars, float* data, int gp, int 
 	while ((c = getchar()) != '\n' && c != EOF);
 }
 
+/*
+* run one GP from start to finish
+*/
 void run_gp(int gp, int len_cars, struct GrandPrix *gps, float *data, struct Car *cars)
 {
 	int i;

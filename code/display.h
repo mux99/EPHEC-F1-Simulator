@@ -45,6 +45,15 @@ int* sort(float* data)
     return out;
 }
 
+int get_index(float* data, int value) {
+    int i;
+    for (i=0;data[i] != end;i++) {
+        if (data[i] == value) {
+            return i;
+        }
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////s
 
 void scoreboard_practice(int len_cars, struct Car* cars, float* data, struct GrandPrix gp,int now,int start)
@@ -421,19 +430,19 @@ void scoreboard_race(int len_cars, struct Car* cars, float* data, struct GrandPr
     int* order_s3 = sort(data+(s3*(len_cars+1)));
     int* order_lp = sort(data+(rlp*(len_cars+1)));
     int i;
-    printf("╔═══════════════════════════════════════════════════════════════════════════════════════════════╗\n");
-    printf("║ RACE %02d:%02d:%02d                                                %20s  Grand Prix ║\n",
+    printf("╔═══════════════════════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║ RACE %02d:%02d:%02d                                                    %20s  Grand Prix ║\n",
                 (int)((int)((now-start)*speed)/60)/60,
                 (int)((now-start)*speed)/60-((int)(((int)((now-start)*speed)/60)/60)*60),
                 (int)((now-start)*speed)-((int)(((now-start)*speed)/60)*60),
                 gp.location);
-    printf("╠══╦════════════════╦═══╦═════════════╦══════════╦══════════╦════╦════════╦════════╦════════╦═╦═╣\n");
-    printf("║%2s│%16s│%3s│%13s║ %8s │ %8s │%4s║%8s│%8s│%8s│%s│%s║\n","/","driver","num","team","time","diff","laps","best S1","best S2","best S3","P","O");
-    printf("╠══╬════════════════╬═══╬═════════════╬══════════╬══════════╬════╬════════╬════════╬════════╬═╬═╣\n");
+    printf("╠══╦════════════════╦═══╦═════════════╦══════════╦══════════╦════╦════════╦════════╦════════╦═╦═╦═══╣\n");
+    printf("║%2s│%16s│%3s│%13s║ %8s │ %8s │%4s║%8s│%8s│%8s│%s│%s║%s║\n","/","driver","num","team","time","diff","laps","best S1","best S2","best S3","P","O","sta");
+    printf("╠══╬════════════════╬═══╬═════════════╬══════════╬══════════╬════╬════════╬════════╬════════╬═╬═╬═══╣\n");
     for (i=0;i<len_cars;i++)
     {
         if (data[order[i]+(rti*(len_cars+1))] > 0){
-            printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│%3d ║%8.3f│%8.3f│%8.3f│%s│%s║\n",
+            printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│%3d ║%8.3f│%8.3f│%8.3f│%s│%s║%3d║\n",
                 i+1,
                 cars[order[i]].driver,
                 cars[order[i]].number,
@@ -450,19 +459,21 @@ void scoreboard_race(int len_cars, struct Car* cars, float* data, struct GrandPr
                 data[s2*(len_cars+1)+order[i]],
                 data[s3*(len_cars+1)+order[i]],
                 cars[order[i]].is_pit == true ? "P" : " ",
-                cars[order[i]].is_out == true ? "O" : " ");
+                cars[order[i]].is_out == true ? "O" : " ",
+                get_index(data+(srt*(len_cars+1)),order[i]));
         } else {
-            printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │%3d ║  ----  │  ----  │  ----  │%s│%s║\n",
+            printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │%3d ║  ----  │  ----  │  ----  │%s│%s║%3d║\n",
                 i+1,
                 cars[order[i]].driver,
                 cars[order[i]].number,
                 cars[order[i]].team,
                 (int)data[lpc*(len_cars+1)+order[i]],
                 cars[order[i]].is_pit == true ? "P" : " ",
-                cars[order[i]].is_out == true ? "O" : " ");
+                cars[order[i]].is_out == true ? "O" : " ",
+                get_index(data+(srt*(len_cars+1)),order[i]));
         }
     }
-    printf("╚══╩════════════════╩═══╩═════════════╬══════════╬══════════╩════╬════════╬════════╬════════╬═╩═╝\n");
+    printf("╚══╩════════════════╩═══╩═════════════╬══════════╬══════════╩════╬════════╬════════╬════════╬═╩═╩═══╝\n");
     printf("                              best lap║ %2d:%06.3f║    best sector║%8.3f│%8.3f│%8.3f║\n",
         (int)data[rlp*(len_cars+1)+order_lp[0]]/60,
         data[rlp*(len_cars+1)+order_lp[0]]-((int)(data[rlp*(len_cars+1)+order_lp[0]]/60))*60,
@@ -494,113 +505,202 @@ void scoreboard_recap(int len_cars, struct Car* cars, float* data, struct GrandP
     int* order_sti = sort(data+(sti*(len_cars+1)));
     int* order_rlp = sort(data+(rlp*(len_cars+1)));
     int i;
-    printf("╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗\n");
-    printf("║ FINAL RECAP                                                                                             %20s Grand Prix ║\n",
+    printf("╔═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗\n");
+    printf("║ FINAL RECAP                                                                                                 %20s Grand Prix ║\n",
                 gp.location);
-    printf("╠══╦════════════════╦═══╦═════════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦═══╦═══╦═══╣\n");
-    printf("║%2s│%16s│%3s│%13s║%10s│%10s│%10s│%10s│%10s│%10s│%10s│%10s│%3s║%3s│%3s║\n","/","driver","num","team","best Q1 ","best Q2 ","best Q3 ","bestSprint","timeSprint","best Race","time Race","diff ","lap","pts","tot");
-    printf("╠══╬════════════════╬═══╬═════════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬═══╬═══╬═══╣\n");
+    printf("╠══╦════════════════╦═══╦═════════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦══════════╦═══╦═══╦═══╦═══╣\n");
+    printf("║%2s│%16s│%3s│%13s║%10s│%10s│%10s│%10s│%10s│%10s│%10s│%10s│%3s│%3s║%3s│%3s║\n","/","driver","num","team","best Q1 ","best Q2 ","best Q3 ","bestSprint","timeSprint","best Race","time Race","diff ","sta","lap","pts","tot");
+    printf("╠══╬════════════════╬═══╬═════════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬═══╬═══╬═══╬═══╣\n");
     for (i=0;i<len_cars;i++)
     {
         if (data[order[i]+(sti*(len_cars+1))] > 0)
         {
             if (data[order[i]+(q3*(len_cars+1))] > 0)
             {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q2*(len_cars+1))]/60,data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q3*(len_cars+1))]/60,data[order[i]+(q3*(len_cars+1))]-((int)data[order[i]+(q3*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(slp*(len_cars+1))]/60,data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(sti*(len_cars+1))]/60,data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q2*(len_cars+1))]/60,
+                    data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q3*(len_cars+1))]/60,
+                    data[order[i]+(q3*(len_cars+1))]-((int)data[order[i]+(q3*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(slp*(len_cars+1))]/60,
+                    data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(sti*(len_cars+1))]/60,
+                    data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else if (data[order[i]+(q2*(len_cars+1))] > 0) {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q2*(len_cars+1))]/60,data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(slp*(len_cars+1))]/60,data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(sti*(len_cars+1))]/60,data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q2*(len_cars+1))]/60,
+                    data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(slp*(len_cars+1))]/60,
+                    data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(sti*(len_cars+1))]/60,
+                    data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else if (data[order[i]+(q1*(len_cars+1))] > 0) {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(slp*(len_cars+1))]/60,data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(sti*(len_cars+1))]/60,data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(slp*(len_cars+1))]/60,
+                    data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(sti*(len_cars+1))]/60,
+                    data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else {
-                printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(slp*(len_cars+1))]/60,data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(sti*(len_cars+1))]/60,data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(slp*(len_cars+1))]/60,
+                    data[order[i]+(slp*(len_cars+1))]-((int)data[order[i]+(slp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(sti*(len_cars+1))]/60,
+                    data[order[i]+(sti*(len_cars+1))]-((int)data[order[i]+(sti*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             }
         } else {
             if (data[order[i]+(q3*(len_cars+1))] > 0)
             {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q2*(len_cars+1))]/60,data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q3*(len_cars+1))]/60,data[order[i]+(q3*(len_cars+1))]-((int)data[order[i]+(q3*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q2*(len_cars+1))]/60,
+                    data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q3*(len_cars+1))]/60,
+                    data[order[i]+(q3*(len_cars+1))]-((int)data[order[i]+(q3*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else if (data[order[i]+(q2*(len_cars+1))] > 0) {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(q2*(len_cars+1))]/60,data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│ %2d:%06.3f│   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(q2*(len_cars+1))]/60,
+                    data[order[i]+(q2*(len_cars+1))]-((int)data[order[i]+(q2*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else if (data[order[i]+(q1*(len_cars+1))] > 0) {
-                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                    i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                    (int)data[order[i]+(q1*(len_cars+1))]/60,data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                    (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                printf("║%2d│%16s│%3d│%13s║ %2d:%06.3f│   ----   │   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                    i+1,
+                    cars[order[i]].driver,
+                    cars[order[i]].number,
+                    cars[order[i]].team,
+                    (int)data[order[i]+(q1*(len_cars+1))]/60,
+                    data[order[i]+(q1*(len_cars+1))]-((int)data[order[i]+(q1*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                    data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                    (int)data[order[i]+(rti*(len_cars+1))]/60,
+                    data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                     i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                     i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                    (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                    get_index(data+(srt*(len_cars+1)),order[i]),
+                    (int)data[lpc*(len_cars+1)+order[i]],
+                    (int)data[order[i]+(pts*(len_cars+1))],
+                    cars[order[i]].points);
             } else {
                 if (data[order[i]+(rti*(len_cars+1))] > 0) {
-                    printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d║%3d│%3d║\n",
-                        i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,
-                        (int)data[order[i]+(rlp*(len_cars+1))]/60,data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
-                        (int)data[order[i]+(rti*(len_cars+1))]/60,data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
+                    printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │   ----   │   ----   │ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│%3d│%3d║%3d│%3d║\n",
+                        i+1,
+                        cars[order[i]].driver,
+                        cars[order[i]].number,
+                        cars[order[i]].team,
+                        (int)data[order[i]+(rlp*(len_cars+1))]/60,
+                        data[order[i]+(rlp*(len_cars+1))]-((int)data[order[i]+(rlp*(len_cars+1))]/60)*60,
+                        (int)data[order[i]+(rti*(len_cars+1))]/60,
+                        data[order[i]+(rti*(len_cars+1))]-((int)data[order[i]+(rti*(len_cars+1))]/60)*60,
                         i > 0 ? (int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60 : 0,
                         i > 0 ? (data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])-((int)(data[order[i]+(rti*(len_cars+1))]-data[order[i-1]+(rti*(len_cars+1))])/60)*60 : 0,
-                        (int)data[lpc*(len_cars+1)+order[i]],(int)data[order[i]+(pts*(len_cars+1))],cars[order[i]].points);
+                        get_index(data+(srt*(len_cars+1)),order[i]),
+                        (int)data[lpc*(len_cars+1)+order[i]],
+                        (int)data[order[i]+(pts*(len_cars+1))],
+                        cars[order[i]].points);
                 } else {
-                        printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │   ║   │%3d║\n",
-                        i+1,cars[order[i]].driver,cars[order[i]].number,cars[order[i]].team,cars[order[i]].points);
+                        printf("║%2d│%16s│%3d│%13s║   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │   ----   │%3d│   ║   │%3d║\n",
+                        i+1,
+                        cars[order[i]].driver,
+                        cars[order[i]].number,
+                        cars[order[i]].team,
+                        get_index(data+(srt*(len_cars+1)),order[i]),
+                        cars[order[i]].points);
                 }
             }
         }
     }
-    printf("╚══╩════════════════╩═══╩═════════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╩══════════╩═══╩═══╩═══╝\n");
+    printf("╚══╩════════════════╩═══╩═════════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╬══════════╩══════════╩═══╩═══╩═══╩═══╝\n");
     printf("                                  best║ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f│ %2d:%06.3f║\n",
         (int)data[q1*(len_cars+1)+order_q1[0]]/60,
         data[q1*(len_cars+1)+order_q1[0]]-((int)(data[q1*(len_cars+1)+order_q1[0]]/60))*60,

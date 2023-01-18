@@ -61,11 +61,11 @@ void car_sim_practice(int i, int length, int gp)
 			lap_time += tmp;
 
 			//update data (sectors)
+			sem_wait(&sem_data);
 			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
-				sem_wait(&sem_data);
 				data[((j+s1)*(len_cars+1))+i] = tmp;
-				sem_post(&sem_data);
 			}
+			sem_post(&sem_data);
 		}
 		//update data
 		sem_wait(&sem_data);
@@ -131,11 +131,11 @@ void car_sim_qualifs(int i, int gp, int length, int step)
 			total_time += tmp;
 			lap_time += tmp;
 
+			sem_wait(&sem_data);
 			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
-				sem_wait(&sem_data);
 				data[((j+s1)*(len_cars+1))+i] = tmp;
-				sem_post(&sem_data);
 			}
+			sem_post(&sem_data);
 		}
 		sem_wait(&sem_data);
 		data[lpc*(len_cars+1)+i]++;
@@ -209,11 +209,11 @@ void car_sim_sprint(int i, int gp, int length)
 			total_time += tmp;
 			lap_time += tmp;
 			
+			sem_wait(&sem_data);
 			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
-				sem_wait(&sem_data);
 				data[((j+s1)*(len_cars+1))+i] = tmp;
-				sem_post(&sem_data);
 			}
+			sem_post(&sem_data);
 		}
 		sem_wait(&sem_data);
 		data[lpc*(len_cars+1)+i]++;
@@ -283,11 +283,11 @@ void car_sim_race(int i, int gp, int length)
 			while(time_to_sleep) time_to_sleep = sleep(time_to_sleep);
 			total_time += tmp;
 			lap_time += tmp;
+			sem_wait(&sem_data);
 			if (data[((j+s1)*(len_cars+1))+i] > tmp || data[((j+s1)*(len_cars+1))+i] == 0) {
-				sem_wait(&sem_data);
 				data[((j+s1)*(len_cars+1))+i] = tmp;
-				sem_post(&sem_data);
 			}
+			sem_post(&sem_data);
 		}
 		sem_wait(&sem_data);
 		data[lpc*(len_cars+1)+i]++;

@@ -758,6 +758,7 @@ void display(int gp)
     while (0 == 0)
     {
         // practice
+        sem_wait(&sem_data);
         switch (gps[gp].GP_state)
         {
             case 0: // idle state
@@ -866,6 +867,7 @@ void display(int gp)
                 shmdt(data);
                 exit(0);
         }
+        sem_post(&sem_data);
         sleep(1);
     }
 }

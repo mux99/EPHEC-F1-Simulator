@@ -1,4 +1,4 @@
-# EPHEC-OS2 F1 world cup
+# F1 world cup simulator
 ## Objective
 simulate a full F1 world cup.
 each race, practice, qualification, etc.
